@@ -19,11 +19,44 @@ func AddFoodEntry(ctx *gin.Context) {
 }
 
 func GetFoodEntries(ctx *gin.Context) {
+	context, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 
+	var foodEntries []bson.M
+	cursor, err := entryCollection.Find(context, bson.M{})
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		fmt.Println(err)
+		return
+	}
+
+	err = cursor.All(ctx, &foodEntries)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		fmt.Println(err)
+		return
+	}
+
+	defer cancel()
+	fmt.Println(foodEntries)
+	ctx.JSON(http.StatusOK, foodEntries)
 }
 
-func GetFoodEntry(ctx *gin.Context) {
+func GetFoodEntryByID(ctx *gin.Context) {
+	id := ctx.Params.ByName("id")
 
+	docID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		fmt.Println(err)
+		return
+	}
+
+	context, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+	result := entryCollection.FindOne(context, bson.M{"_id": docID})
+	ctx.JSON(http.StatusOK, result)
+
+	defer cancel()
 }
 
 func GetFoodEntryByIngredient(ctx *gin.Context) {
