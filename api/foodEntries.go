@@ -84,7 +84,6 @@ func DeleteFoodEntry(ctx *gin.Context) {
 	context, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 
 	result, err := entryCollection.DeleteOne(context, bson.M{"_id": docID})
-
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		fmt.Println(err)
