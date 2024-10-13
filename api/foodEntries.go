@@ -30,7 +30,7 @@ func AddFoodEntry(ctx *gin.Context) {
 
 	err = validate.Struct(foodEntry)
 	if err != nil{
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": validationErr.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		fmt.Println(err)
 		return
 	}
@@ -95,7 +95,43 @@ func GetFoodEntryByIngredient(ctx *gin.Context) {
 }
 
 func UpdateFoodEntry(ctx *gin.Context) {
+	
+	id := ctx.Params.ByName("id")
+	docID, _ := primitive.ObjectIDFromHex(id)
 
+	var foodEntry models.FoodEntry
+	err := ctx.BindJSON(foodEntry)
+	if err != nil{
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		fmt.Println(err)
+		return
+	}
+
+	context, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+
+	err = validate.Struct(foodEntry)
+	if err != nil{
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		fmt.Println(err)
+		return
+	}
+
+	result, err := entryCollection.ReplaceOne(context,
+	bson.M{"_id": docID},
+	bson.M{
+		"dish":        foodEntry.Dish,
+		"fat":         foodEntry.Fat,
+		"ingredients": foodEntry.Ingredients,
+		"calories":    foodEntry.Calories,
+	},
+)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		fmt.Println(err)
+		return
+	}
+	defer cancel()
+	ctx.JSON(http.StatusOK, result.ModifiedCount)
 }
 
 func UpdateFoodIngredient(ctx *gin.Context) {
