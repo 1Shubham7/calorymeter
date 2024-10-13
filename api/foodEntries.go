@@ -8,28 +8,27 @@ import (
 
 	"github.com/1shubham7/calorymeter/models"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"github.com/go-playground/validator/v10"
-
 )
 
 var validate = validator.New()
 var entryCollection *mongo.Collection = OpenCollection(Client, "calories")
 
 func AddFoodEntry(ctx *gin.Context) {
-	
+
 	var foodEntry models.FoodEntry
 	err := ctx.BindJSON(&foodEntry)
-	if err != nil{
+	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		fmt.Println(err)
 		return
 	}
 
 	err = validate.Struct(foodEntry)
-	if err != nil{
+	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		fmt.Println(err)
 		return
@@ -92,16 +91,36 @@ func GetFoodEntryByID(ctx *gin.Context) {
 
 func GetFoodEntryByIngredient(ctx *gin.Context) {
 
+	ingredient := ctx.Params.ByName("id")
+	ctxTimeout, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
+
+	var entries []bson.M
+	cursor, err := entryCollection.Find(ctxTimeout, bson.M{"ingredients": ingredient})
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		fmt.Println(err)
+		return
+	}
+
+	err = cursor.All(ctxTimeout, &entries)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		fmt.Println(err)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, entries)
 }
 
 func UpdateFoodEntry(ctx *gin.Context) {
-	
+
 	id := ctx.Params.ByName("id")
 	docID, _ := primitive.ObjectIDFromHex(id)
 
 	var foodEntry models.FoodEntry
-	err := ctx.BindJSON(foodEntry)
-	if err != nil{
+	err := ctx.BindJSON(&foodEntry)
+	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		fmt.Println(err)
 		return
@@ -110,21 +129,21 @@ func UpdateFoodEntry(ctx *gin.Context) {
 	context, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 
 	err = validate.Struct(foodEntry)
-	if err != nil{
+	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		fmt.Println(err)
 		return
 	}
 
 	result, err := entryCollection.ReplaceOne(context,
-	bson.M{"_id": docID},
-	bson.M{
-		"dish":        foodEntry.Dish,
-		"fat":         foodEntry.Fat,
-		"ingredients": foodEntry.Ingredients,
-		"calories":    foodEntry.Calories,
-	},
-)
+		bson.M{"_id": docID},
+		bson.M{
+			"dish":        foodEntry.Dish,
+			"fat":         foodEntry.Fat,
+			"ingredients": foodEntry.Ingredients,
+			"calories":    foodEntry.Calories,
+		},
+	)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		fmt.Println(err)
@@ -135,7 +154,34 @@ func UpdateFoodEntry(ctx *gin.Context) {
 }
 
 func UpdateFoodIngredient(ctx *gin.Context) {
+	id := ctx.Params.ByName("id")
+	docID, _ := primitive.ObjectIDFromHex(id)
 
+	ctxTimeout, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
+
+	type Ingredient struct{
+		Ingredients *string `json:"ingredients"`
+	}
+	var ingredient Ingredient
+	if err := ctx.BindJSON(&ingredient); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		fmt.Println(err)
+		return
+	}
+
+	result, err := OpenCollection().UpdateOne(ctxTimeout,
+		bson.M{"_id": docID},
+		bson.D{{"$set", bson.D{{"ingredients", ingredient.Ingredients}}}},
+	)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		fmt.Println(err)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, result.MatchedCount)
 }
 
 func DeleteFoodEntry(ctx *gin.Context) {
