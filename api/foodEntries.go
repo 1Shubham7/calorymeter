@@ -170,7 +170,7 @@ func UpdateFoodIngredient(ctx *gin.Context) {
 		return
 	}
 
-	result, err := OpenCollection().UpdateOne(ctxTimeout,
+	result, err := entryCollection.UpdateOne(ctxTimeout,
 		bson.M{"_id": docID},
 		bson.D{{"$set", bson.D{{"ingredients", ingredient.Ingredients}}}},
 	)
