@@ -6,16 +6,47 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/1shubham7/calorymeter/models"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"github.com/go-playground/validator/v10"
+
 )
 
-var entryCollection *mongo.Collection = openCollection(Client, "calories")
+var validate = validator.New()
+var entryCollection *mongo.Collection = OpenCollection(Client, "calories")
 
 func AddFoodEntry(ctx *gin.Context) {
+	
+	var foodEntry models.FoodEntry
+	err := ctx.BindJSON(&foodEntry)
+	if err != nil{
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		fmt.Println(err)
+		return
+	}
 
+	err = validate.Struct(foodEntry)
+	if err != nil{
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": validationErr.Error()})
+		fmt.Println(err)
+		return
+	}
+
+	foodEntry.ID = primitive.NewObjectID()
+	var c, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+	result, insertErr := entryCollection.InsertOne(c, foodEntry)
+	if insertErr != nil {
+		msg := fmt.Sprintf("order item was not created")
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": msg})
+		fmt.Println(insertErr)
+		return
+	}
+	defer cancel()
+
+	ctx.JSON(http.StatusOK, result)
 }
 
 func GetFoodEntries(ctx *gin.Context) {
@@ -73,13 +104,7 @@ func UpdateFoodIngredient(ctx *gin.Context) {
 
 func DeleteFoodEntry(ctx *gin.Context) {
 	id := ctx.Params.ByName("id")
-
-	docID, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		fmt.Println(err)
-		return
-	}
+	docID, _ := primitive.ObjectIDFromHex(id)
 
 	context, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 
