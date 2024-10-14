@@ -8,5 +8,5 @@ type FoodEntry struct {
 	Fat         string             `json:"fat"`
 	Protein     string             `json:"protein"`
 	Ingredients string             `json:"ingredients"`
-	Calories    int                `json:"colories" binding:"required, min=1"`
+	Calories    int                `json:"calories" binding:"required,min=1"`
 }
