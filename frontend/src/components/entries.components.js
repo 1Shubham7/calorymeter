@@ -124,7 +124,7 @@ const Entries =() =>{
         axios.post(url, {
             "ingredients":newEntry.ingredients,
             "dish": newEntry.dish,
-            "calories": newEntry.calories,
+            "calories": parseFloat(newEntry.fat),
             "fat": parseFloat(newEntry.fat)
         }).then(response => {
             if(response.status == 200){
