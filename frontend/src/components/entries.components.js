@@ -120,7 +120,7 @@ const Entries =() =>{
 
     function addSingleEntry(){
         setAddNewEntry(false)
-        var url = "http://localhost:8000/entry/create"
+        var url = "http://localhost:8000/food/create"
         axios.post(url, {
             "ingredients":newEntry.ingredients,
             "dish": newEntry.dish,
