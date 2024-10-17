@@ -160,7 +160,7 @@ func UpdateFoodIngredient(ctx *gin.Context) {
 	ctxTimeout, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 	defer cancel()
 
-	type Ingredient struct{
+	type Ingredient struct {
 		Ingredients *string `json:"ingredients"`
 	}
 	var ingredient Ingredient
