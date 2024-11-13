@@ -1,11 +1,9 @@
 <div align="center">
   <h1>Smyik - Calorymeter - Get Fit Faster </h1>
 
-  [![codecov](https://codecov.io/gh/1Shubham7/Banking-application/graph/badge.svg?token=X5WO4RO683)](https://codecov.io/gh/1Shubham7/Banking-application)
-  [![GitHub last commit](https://img.shields.io/github/last-commit/1shubham7/banking-application)](#)
-  ![GitHub language count](https://img.shields.io/github/languages/count/1shubham7/banking-application)
-  ![GitHub top language](https://img.shields.io/github/languages/top/1shubham7/banking-application)
-  ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/1shubham7/banking-application/Test-and-Coverage)
+  [![GitHub last commit](https://img.shields.io/github/last-commit/1Shubham7/calorymeter/)](#)
+  ![GitHub language count](https://img.shields.io/github/languages/count/1Shubham7/calorymeter/)
+  ![GitHub top language](https://img.shields.io/github/languages/top/1Shubham7/calorymeter/)
 
 </div>
 
