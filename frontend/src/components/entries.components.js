@@ -9,6 +9,7 @@ import Entry from './single-entry.component';
 const Entries =() =>{
 
     const [entries, setEntries] = useState([])
+    const [tip, setTip] = useState([])
     const [refreshData, setRefreshData] = useState(false)
     const [changeEntry, setChangeEntry] = useState({"change": false, "id": 0})
     const [changeIngredient, setChangeIngredient] = useState({"change": false, "id": 0})
@@ -91,6 +92,9 @@ const Entries =() =>{
                 <Button onClick={() => setChangeEntry({"change": false, "id":0})}>Cancel</Button>
             </Modal.Body>
         </Modal>
+
+        {/* <h1>Tip: {tip}</h1> */}
+
         </div> 
     );
 
@@ -110,10 +114,15 @@ const Entries =() =>{
     function changeSingleEntry(){
         changeEntry.change = false;
         var url = "http://localhost:8000/entry/update/" + changeEntry.id
-        axios.put(url, newEntry)
-        .then(response =>{
-            if(response.status == 200){
-                setRefreshData(true)
+        axios.put(url, {
+            "dish": newEntry.dish, // Ensure this is a string
+            "ingredients": newEntry.ingredients, // Ensure this is a string
+            "calories": parseInt(newEntry.calories, 10) || 0, // Convert to number; default to 0 if NaN
+            "fat": parseFloat(newEntry.fat) || 0 // Convert to number; default to 0 if NaN
+        })
+        .then(response => {
+            if (response.status === 200) {
+                setRefreshData(true);
             }
         })
     }
@@ -151,6 +160,7 @@ const Entries =() =>{
         }).then(response => {
             if(response.status == 200){
                 setEntries(response.data)
+                setTip(response.data)
             }
         })
     }

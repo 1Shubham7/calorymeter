@@ -20,6 +20,7 @@ var entryCollection *mongo.Collection = OpenCollection(Client, "calories")
 func AddFoodEntry(ctx *gin.Context) {
 
 	var foodEntry models.FoodEntry
+
 	err := ctx.BindJSON(&foodEntry)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -84,7 +85,15 @@ func GetFoodEntryByID(ctx *gin.Context) {
 
 	context, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 	result := entryCollection.FindOne(context, bson.M{"_id": docID})
-	ctx.JSON(http.StatusOK, result)
+
+	var foodEntry models.FoodEntry
+	if err := result.Decode(&foodEntry); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		fmt.Println(err)
+		return
+	}
+	foodEntry.Tip = "Shubham"
+	ctx.JSON(http.StatusOK, foodEntry)
 
 	defer cancel()
 }

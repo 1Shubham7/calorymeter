@@ -9,4 +9,5 @@ type FoodEntry struct {
 	Protein     string             `json:"protein"`
 	Ingredients string             `json:"ingredients"`
 	Calories    int                `json:"calories" binding:"required,min=1"`
+	Tip string `json:"tip"`
 }
