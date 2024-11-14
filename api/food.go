@@ -92,7 +92,6 @@ func GetFoodEntryByID(ctx *gin.Context) {
 		fmt.Println(err)
 		return
 	}
-	foodEntry.Tip = "Shubham"
 	ctx.JSON(http.StatusOK, foodEntry)
 
 	defer cancel()
