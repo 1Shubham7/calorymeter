@@ -39,7 +39,7 @@ func AddFoodEntry(ctx *gin.Context) {
 	var c, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 	result, insertErr := entryCollection.InsertOne(c, foodEntry)
 	if insertErr != nil {
-		msg := fmt.Sprintf("order item was not created")
+		msg := "order item was not created"
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": msg})
 		fmt.Println(insertErr)
 		return

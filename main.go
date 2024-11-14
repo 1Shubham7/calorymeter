@@ -35,5 +35,9 @@ func main() {
 
 	router.DELETE("/entry/delete/:id", api.DeleteFoodEntry)
 
+
+
+	router.GET("/tip", api.GetTip)
+
 	router.Run(":" + port)
 }
