@@ -2,14 +2,19 @@ package api
 
 import (
 	"context"
+	"log"
 	"net/http"
 	"os"
+	"time"
+	"fmt"
+	"strings"
+
 	"github.com/joho/godotenv"
-	"log"
 
 	"github.com/1shubham7/calorymeter/models"
 	"github.com/gin-gonic/gin"
 	"github.com/google/generative-ai-go/genai"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"google.golang.org/api/option"
 )
@@ -18,7 +23,26 @@ func GetTip(ctx *gin.Context){
     tip := &models.Tip{}
 	tip.ID = primitive.NewObjectID()
 
-	err := godotenv.Load()
+	var foodEntries []bson.M
+	contextT,cancel := context.WithTimeout(context.Background(), 100*time.Second)
+	cursor, err := entryCollection.Find(contextT, bson.M{})
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		fmt.Println(err)
+		return
+	}
+
+	defer cancel()
+
+	err = cursor.All(ctx, &foodEntries)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		fmt.Println(err)
+		return
+	}
+
+	err = godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
@@ -33,12 +57,36 @@ func GetTip(ctx *gin.Context){
 	defer client.Close()
 
 	model := client.GenerativeModel("gemini-1.5-flash")
-	resp, err := model.GenerateContent(c, genai.Text("Explain how fasting works in a short para"))
+	
+	// var query string
+	// foodEntries is a slice of maps
+	var builder strings.Builder
+	for i := range foodEntries {
+		e := foodEntries[i]
+		for key, val := range e {
+			if key == "id" || key == "protein" || key == "_id" {
+				continue
+			}
+			builder.WriteString(fmt.Sprintf("%v is %v. ", key, val))
+		}
+		builder.WriteString("\n")
+	}
+	builder.WriteString(`\n
+	Firstly, Tell me if today's day was a plus or a minus in my weight loss journey.
+	Give me 3 short key points as advices for loosing my weight or gaining acc. to the food I ate.
+	I know you are not a docter, but give me some advices (don't mention you are a docker, I know it already).
+	Also use emojis in your response.
+	Please do not use ** in your responce, use plain text.
+	Also if the data I am giving is wrong or insufficient, just mention that in a funny way.
+	`)
+
+	query := builder.String()
+	
+	resp, err := model.GenerateContent(c, genai.Text(query))
 	if err != nil {
 		log.Fatal(err)
 	}
 
     tip.AITip = resp
-
     ctx.JSON(http.StatusOK, tip)
 }
