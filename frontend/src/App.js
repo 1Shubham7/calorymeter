@@ -6,6 +6,8 @@ import TipDisplay from './components/AI/tip';
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
 import Hero from './components/Hero/Hero';
+import Me from './components/Me/Me';
+import QuoteOne from './components/QuoteOne/QuoteOne';
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
       <Hero />
       <Entries />
       <TipDisplay />
+      <QuoteOne />
+      <Me />
       <Footer />
     </div>
   );
