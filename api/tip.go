@@ -2,12 +2,12 @@ package api
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
-	"time"
-	"fmt"
 	"strings"
+	"time"
 
 	"github.com/joho/godotenv"
 
@@ -19,12 +19,12 @@ import (
 	"google.golang.org/api/option"
 )
 
-func GetTip(ctx *gin.Context){
-    tip := &models.Tip{}
+func GetTip(ctx *gin.Context) {
+	tip := &models.Tip{}
 	tip.ID = primitive.NewObjectID()
 
 	var foodEntries []bson.M
-	contextT,cancel := context.WithTimeout(context.Background(), 100*time.Second)
+	contextT, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 	cursor, err := entryCollection.Find(contextT, bson.M{})
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
@@ -57,7 +57,7 @@ func GetTip(ctx *gin.Context){
 	defer client.Close()
 
 	model := client.GenerativeModel("gemini-1.5-flash")
-	
+
 	// var query string
 	// foodEntries is a slice of maps
 	var builder strings.Builder
@@ -81,12 +81,12 @@ func GetTip(ctx *gin.Context){
 	`)
 
 	query := builder.String()
-	
+
 	resp, err := model.GenerateContent(c, genai.Text(query))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-    tip.AITip = resp
-    ctx.JSON(http.StatusOK, tip)
+	tip.AITip = resp
+	ctx.JSON(http.StatusOK, tip)
 }
