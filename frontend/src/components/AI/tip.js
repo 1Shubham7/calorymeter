@@ -8,7 +8,7 @@ const TipDisplay = () => {
     try {
       const response = await axios.get('http://localhost:8000/tip');
       setTip(response.data.aitip.Candidates[0].Content.Parts[0]);
-      console.log(response.data.aitip.Candidates[0].Content.Parts[0])
+      console.log(response.data.aitip.Candidates[0].Content.Parts[0]);
     } catch (error) {
       console.error('Error fetching tip:', error);
     }
