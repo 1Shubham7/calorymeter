@@ -201,7 +201,7 @@ const Entries = () => {
       .post(url, {
         ingredients: newEntry.ingredients,
         dish: newEntry.dish,
-        calories: parseFloat(newEntry.fat),
+        calories: parseFloat(newEntry.calories),
         fat: parseFloat(newEntry.fat),
       })
       .then((response) => {
