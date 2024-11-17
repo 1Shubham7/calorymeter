@@ -15,28 +15,26 @@ import (
 )
 
 var validate = validator.New()
-var entryCollection *mongo.Collection = OpenCollection(Client, "calories")
+var entryCollection *mongo.Collection = CreateCollection(Client, "calories")
 
 func AddFoodEntry(ctx *gin.Context) {
-
 	var foodEntry models.FoodEntry
 
 	err := ctx.BindJSON(&foodEntry)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		fmt.Println(err)
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	err = validate.Struct(foodEntry)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		fmt.Println(err)
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	foodEntry.ID = primitive.NewObjectID()
 	var c, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
 	result, insertErr := entryCollection.InsertOne(c, foodEntry)
 	if insertErr != nil {
 		msg := "order item was not created"
@@ -44,7 +42,7 @@ func AddFoodEntry(ctx *gin.Context) {
 		fmt.Println(insertErr)
 		return
 	}
-	defer cancel()
+
 	ctx.JSON(http.StatusOK, result)
 }
 
