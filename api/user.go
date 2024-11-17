@@ -14,12 +14,12 @@ import (
 // creating a new collection
 var usersCollection *mongo.Collection = CreateCollection(Client, "users")
 
-func AddUser(ctx *gin.Context){
+func AddUser(ctx *gin.Context) {
 	var user models.User
 
 	err := ctx.BindJSON(&user)
 	if err != nil {
-		ctx.JSON (http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -34,6 +34,6 @@ func AddUser(ctx *gin.Context){
 	defer cancel()
 	result, insertErr := usersCollection.InsertOne(c, user)
 	if insertErr != nil {
-		
+
 	}
 }
