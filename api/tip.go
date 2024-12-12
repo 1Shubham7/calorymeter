@@ -76,7 +76,7 @@ func GetTip(ctx *gin.Context) {
 	Give me 3 short key points as advices for loosing my weight or gaining acc. to the food I ate.
 	I know you are not a docter, but give me some advices (don't mention you are a docker, I know it already).
 	Also use emojis in your response.
-	Please do not use ** in your responce, use plain text.
+	You answer must be in tags, consider as if you are giving me code for a middle of a react component (don't use html tags).
 	Also if the data I am giving is wrong or insufficient, just mention that in a funny way.
 	`)
 
