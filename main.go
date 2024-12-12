@@ -17,14 +17,16 @@ func main() {
 
 	router := gin.New()
 	router.Use(gin.Logger())
+
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000"}, // Replace with your frontend's URL
+		AllowOrigins:     []string{"http://localhost:3000"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		AllowCredentials: true,
 	}))
 
 	router.POST("/food/create", api.AddFoodEntry)
+	router.POST("/signup", api.SignUpUser)
 
 	router.GET("/entries", api.GetFoodEntries)
 	router.GET("/entry/:id", api.GetFoodEntryByID)
