@@ -54,6 +54,10 @@ func SignUpUser(ctx *gin.Context) {
 
 	// Hashing Password
 	password, err := helpers.HashPassword(user.HashedPassword)
+	if (err != nil) {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 	user.HashedPassword = password
 
 	// Additional Details
@@ -63,7 +67,14 @@ func SignUpUser(ctx *gin.Context) {
 		return
 	}
 
-	// Tokens and stuff
+	// Tokens
+	token, refreshToken, err := helpers.GenerateTokens(user.Email, user.UserName, user.FirstName)
+	if (err != nil) {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	user.Token = token
+	user.RefreshToken = refreshToken
 
 	result, insertErr := userCollection.InsertOne(c, user)
 	if insertErr != nil {
