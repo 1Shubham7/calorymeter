@@ -1,11 +1,15 @@
 package helpers
 
 import (
+	"context"
 	"os"
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 
 	"github.com/1shubham7/calorymeter/db"
 )
@@ -48,10 +52,54 @@ func GenerateTokens(email, username, firstname string) (signedToken, signedRefre
 	return token, refreshToken, nil
 }
 
-func RefreshToken() {
+func RefreshTokens(signedToken, signedRefreshToken, username string) error {
+	var c, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
 
+	// Create an updateObj Document
+	var updateObj primitive.D
+
+	// Add tokens to updateObj
+	updateObj = append(updateObj, bson.E{Key: "token", Value: signedToken})
+	updateObj = append(updateObj, bson.E{Key: "refresh_token", Value: signedRefreshToken})
+
+	upsert := true // means if document with username doesn’t exist, it will create one
+	filter := bson.M{"username": username}
+	opt := options.UpdateOptions{
+		Upsert: &upsert,
+	}
+
+	_, err := userCollection.UpdateOne(
+		c, filter, bson.D{{Key: "$set", Value: updateObj}}, &opt,
+	)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
-func ValidateToken() {
+func ValidateToken(signedToken string) (claims *SignedDetails, msg string) {
+	token, _ := jwt.ParseWithClaims(
+		signedToken,
+		&SignedDetails{},
+		func(token *jwt.Token) (interface{}, error) {
+			return []byte(PRIVATE_KEY), nil
+		},
+	)
 
+	claims, ok := token.Claims.(*SignedDetails)
+
+	// Invalid Token
+	if !ok {
+		msg = "the token is invalid"
+		return
+	}
+
+	// Expired Token
+	if claims.ExpiresAt < time.Now().Local().Unix() {
+		msg = "token has expired"
+		return
+	}
+
+	return claims, msg
 }
