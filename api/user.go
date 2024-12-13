@@ -2,8 +2,8 @@ package api
 
 import (
 	"context"
-	"net/http"
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -11,9 +11,9 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 
-	"github.com/1shubham7/calorymeter/models"
-	"github.com/1shubham7/calorymeter/helpers"
 	"github.com/1shubham7/calorymeter/db"
+	"github.com/1shubham7/calorymeter/helpers"
+	"github.com/1shubham7/calorymeter/models"
 )
 
 var userCollection *mongo.Collection = db.OpenCollection(db.Client, "users")
@@ -22,13 +22,13 @@ func SignUpUser(ctx *gin.Context) {
 	user := models.User{}
 
 	err := ctx.BindJSON(&user)
-	if (err != nil) {
+	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"err": err.Error()})
 		return
 	}
 
 	err = validate.Struct(user)
-	if (err != nil) {
+	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"err": err.Error()})
 		return
 	}
@@ -40,11 +40,11 @@ func SignUpUser(ctx *gin.Context) {
 
 	// Email Validation
 	count, err := userCollection.CountDocuments(c, bson.M{"email": user.Email})
-	if (err != nil) {
+	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	if (count > 0) {
+	if count > 0 {
 		msg := "This Email has already been registered with a different user"
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": msg})
 		return
@@ -54,22 +54,22 @@ func SignUpUser(ctx *gin.Context) {
 
 	// Hashing Password
 	password, err := helpers.HashPassword(user.HashedPassword)
-	if (err != nil) {
+	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	user.HashedPassword = password
 
 	// Additional Details
-	user.CreatedAt, err =  time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
-	if (err != nil) {
+	user.CreatedAt, err = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
+	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	// Tokens
 	token, refreshToken, err := helpers.GenerateTokens(user.Email, user.UserName, user.FirstName)
-	if (err != nil) {
+	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}

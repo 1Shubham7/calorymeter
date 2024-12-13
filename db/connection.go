@@ -31,7 +31,7 @@ func DBinstance() *mongo.Client {
 
 var Client *mongo.Client = DBinstance()
 
-// The OpenCollection function would opens a  collection, If the collection does not exist, 
+// The OpenCollection function would opens a  collection, If the collection does not exist,
 // MongoDB will create it.
 func OpenCollection(client *mongo.Client, collectionName string) *mongo.Collection {
 	var collection *mongo.Collection = client.Database("caloriesdb").Collection(collectionName)

@@ -6,7 +6,7 @@ import (
 
 func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
-	if (err != nil) {
+	if err != nil {
 		return "", err
 	}
 	return string(bytes), nil
@@ -15,7 +15,7 @@ func HashPassword(password string) (string, error) {
 func VerifyPassword(userPassword, providedPassword string) (bool, string) {
 	err := bcrypt.CompareHashAndPassword([]byte(providedPassword), []byte(userPassword))
 	// error means the password didn't match
-	if (err != nil) {
+	if err != nil {
 		return false, "password didn't match"
 	}
 	return true, "password matches"
