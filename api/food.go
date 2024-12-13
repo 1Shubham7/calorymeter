@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/1shubham7/calorymeter/db"
 	"github.com/1shubham7/calorymeter/models"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -15,7 +16,7 @@ import (
 )
 
 var validate = validator.New()
-var entryCollection *mongo.Collection = OpenCollection(Client, "calories")
+var entryCollection *mongo.Collection = db.OpenCollection(db.Client, "calories")
 
 func AddFoodEntry(ctx *gin.Context) {
 	var foodEntry models.FoodEntry

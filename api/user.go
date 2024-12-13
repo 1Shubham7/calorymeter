@@ -12,10 +12,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 
 	"github.com/1shubham7/calorymeter/models"
+	"github.com/1shubham7/calorymeter/helpers"
 	"github.com/1shubham7/calorymeter/db"
 )
 
-var userCollection *mongo.Collection = OpenCollection(Client, "users")
+var userCollection *mongo.Collection = db.OpenCollection(db.Client, "users")
 
 func SignUpUser(ctx *gin.Context) {
 	user := models.User{}
