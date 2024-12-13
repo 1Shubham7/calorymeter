@@ -15,7 +15,7 @@ import (
 )
 
 var validate = validator.New()
-var entryCollection *mongo.Collection = CreateCollection(Client, "calories")
+var entryCollection *mongo.Collection = OpenCollection(Client, "calories")
 
 func AddFoodEntry(ctx *gin.Context) {
 	var foodEntry models.FoodEntry
