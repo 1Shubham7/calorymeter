@@ -5,11 +5,14 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/1shubham7/calorymeter/db"
-	"github.com/1shubham7/calorymeter/models"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+
+	"github.com/1shubham7/calorymeter/db"
+	"github.com/1shubham7/calorymeter/helpers"
+	"github.com/1shubham7/calorymeter/mail"
+	"github.com/1shubham7/calorymeter/models"
 )
 
 var otpCollection *mongo.Collection = db.OpenCollection(db.Client, "otp")
@@ -40,7 +43,19 @@ func SendOTPHandler(ctx *gin.Context) {
 		return
 	}
 
-	mail.SendMail()
+	name := "smyik1306@gmail.com"
+	from := "smyik1306@gmail.com"
+	emailPassword := "cezs reyw kgku gggj"
+	emailSender := mail.NewSender(name, from, emailPassword)
+
+	subject, content, attachFiles := helpers.EmailDetails()
+	to := []string{optHandler.Email}
+	err = emailSender.SendEmail(subject, content, to, nil, nil, attachFiles)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
 	ctx.JSON(http.StatusOK, gin.H{
 		"username": optHandler.Username,
 		"email": optHandler.Email,

@@ -34,7 +34,7 @@ func NewSender(name, email, password string) EmailSender {
 
 func (s *Sender) SendEmail(subject, content string, to, cc, bcc, attachFiles []string) error {
 	e := email.NewEmail()
-	e.From = s.Name
+	e.From = s.Email
 	e.Subject = subject
 	e.HTML = []byte(content)
 	e.To = to
