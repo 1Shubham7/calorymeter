@@ -2,9 +2,9 @@ package api
 
 import (
 	"context"
+	"math/rand"
 	"net/http"
 	"time"
-	"math/rand"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -34,13 +34,13 @@ func SendOTPHandler(ctx *gin.Context) {
 	}
 
 	optHandler.ID = primitive.NewObjectID()
-	
+
 	// Range of OTP [1000, 9999]
 	optHandler.OTP = rand.Intn(9000) + 1000
 
 	c, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 	defer cancel()
-    _, insertErr := otpCollection.InsertOne(c, optHandler)
+	_, insertErr := otpCollection.InsertOne(c, optHandler)
 	if insertErr != nil {
 		msg := "otp couldn't be added to db"
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": msg})
@@ -62,6 +62,6 @@ func SendOTPHandler(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"username": optHandler.Username,
-		"email": optHandler.Email,
+		"email":    optHandler.Email,
 	})
 }

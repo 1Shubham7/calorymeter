@@ -73,7 +73,7 @@ func SignUpUser(ctx *gin.Context) {
 
 	// Delete the OPT entry from optCollection
 	_, err = otpCollection.DeleteOne(c, otpFilter)
-	if err != nil{
+	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -111,6 +111,6 @@ func SignUpUser(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"result": result,
-		"user": user,
+		"user":   user,
 	})
 }
