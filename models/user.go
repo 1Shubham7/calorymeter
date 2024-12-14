@@ -11,7 +11,7 @@ type User struct {
 	UserName       string             `json:"username" validate:"required"`
 	FirstName      string             `json:"first_name"`
 	LastName       string             `json:"last_name"`
-	Email          string             `json:"email"`
+	Email          string             `json:"email" validate:"required"`
 	HashedPassword string             `json:"password"`
 	User_type      string             `json:"user_type"`
 	Token          string             `json:"token"`

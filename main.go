@@ -27,6 +27,7 @@ func main() {
 
 	router.POST("/food/create", api.AddFoodEntry)
 	router.POST("/signup", api.SignUpUser)
+	router.POST("/signupopt", api.sendOTPHandler)
 
 	router.GET("/entries", api.GetFoodEntries)
 	router.GET("/entry/:id", api.GetFoodEntryByID)
