@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -80,7 +79,6 @@ func SignUpUser(ctx *gin.Context) {
 	if insertErr != nil {
 		msg := "user couldn't sign in, try again!"
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": msg})
-		fmt.Println(insertErr)
 		return
 	}
 
