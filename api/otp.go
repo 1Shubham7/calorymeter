@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"time"
+	"math/rand"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -43,13 +44,16 @@ func SendOTPHandler(ctx *gin.Context) {
 		return
 	}
 
-	name := "smyik1306@gmail.com"
+	name := "Shubham from Calorymeter"
 	from := "smyik1306@gmail.com"
 	emailPassword := "cezs reyw kgku gggj"
 	emailSender := mail.NewSender(name, from, emailPassword)
 
-	subject, content, attachFiles := helpers.EmailDetails()
+	// Range of OTP [1000, 9999]
+	optHandler.OTP = rand.Intn(9000) + 1000
+
 	to := []string{optHandler.Email}
+	subject, content, attachFiles := helpers.EmailDetails(optHandler.OTP, to[0])
 	err = emailSender.SendEmail(subject, content, to, nil, nil, attachFiles)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

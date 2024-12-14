@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -46,6 +47,27 @@ func SignUpUser(ctx *gin.Context) {
 	if count > 0 {
 		msg := "This Email has already been registered with a different user"
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": msg})
+		return
+	}
+
+	//OTP Validation
+	otpFilter := bson.M{"email": user.Email}
+	var otpHandler models.OTPHandler
+
+	err = otpCollection.FindOne(c, otpFilter).Decode(&otpHandler)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": "No OTP found for the given email"})
+		} else {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		}
+		return
+	}
+
+	// OTP matches
+	if user.OTP != otpHandler.OTP {
+		err = fmt.Errorf("incorrect otp")
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
 

@@ -6,5 +6,5 @@ type OTPHandler struct {
 	ID       primitive.ObjectID `json:"otp_id"`
 	Username string `json:"username" validate:"required"`
 	Email string `json:"email" validate:"required"`
-	OTP string `json:"otp"`
+	OTP int `json:"otp"`
 }
