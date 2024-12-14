@@ -34,6 +34,9 @@ func SendOTPHandler(ctx *gin.Context) {
 	}
 
 	optHandler.ID = primitive.NewObjectID()
+	
+	// Range of OTP [1000, 9999]
+	optHandler.OTP = rand.Intn(9000) + 1000
 
 	c, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 	defer cancel()
@@ -48,9 +51,6 @@ func SendOTPHandler(ctx *gin.Context) {
 	from := "smyik1306@gmail.com"
 	emailPassword := "cezs reyw kgku gggj"
 	emailSender := mail.NewSender(name, from, emailPassword)
-
-	// Range of OTP [1000, 9999]
-	optHandler.OTP = rand.Intn(9000) + 1000
 
 	to := []string{optHandler.Email}
 	subject, content, attachFiles := helpers.EmailDetails(optHandler.OTP, to[0])

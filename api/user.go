@@ -23,13 +23,13 @@ func SignUpUser(ctx *gin.Context) {
 
 	err := ctx.BindJSON(&user)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"err": err.Error()})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	err = validate.Struct(user)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"err": err.Error()})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -71,7 +71,12 @@ func SignUpUser(ctx *gin.Context) {
 		return
 	}
 
-	// UserName Validation
+	// Delete the OPT entry from optCollection
+	_, err = otpCollection.DeleteOne(c, otpFilter)
+	if err != nil{
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
 	// Hashing Password
 	password, err := helpers.HashPassword(user.HashedPassword)
