@@ -114,3 +114,34 @@ func SignUpUser(ctx *gin.Context) {
 		"user":   user,
 	})
 }
+
+func Login(ctx *gin.Context) {
+	var c, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
+
+	var user models.User
+	var userFromDb models.User
+
+	err := ctx.BindJSON(user)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err = userCollection.FindOne(c, bson.M{"email": user.Email}).Decode(userFromDb)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	isValid, msg := helpers.VerifyPassword(user.HashedPassword, userFromDb.HashedPassword)
+	if !isValid {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": msg})
+		return
+	}
+
+	token, refreshToken, _ := helpers.GenerateTokens(userFromDb.Email, userFromDb.UserName, userFromDb.FirstName)
+	helpers.RefreshTokens(token, refreshToken, userFromDb.UserName)
+
+	ctx.JSON(http.StatusOK, userFromDb)
+}
