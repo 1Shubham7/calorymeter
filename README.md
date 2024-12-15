@@ -7,6 +7,9 @@
 
 </div>
 
+
+## README is WIP
+
 The "Mission Health" project aims to enhance fitness routines by leveraging human activity analysis and GPS data. This project focuses on using technology to analyze user activity patterns and GPS location data to provide users with improved fitness results.
 
 ⭐ Star us on GitHub — it motivates me a lot!
@@ -135,11 +138,3 @@ Vedang  Tiwari </b></sub></a></td>
 ---
 
 Thank you for your interest in `Mission Health`! If you have any questions, or suggestions, or encounter any issues, feel free to reach out or open an issue on the GitHub repository. Happy coding!
-
-<!-- Markdown Badges and Links -->
-
-[Hashnode-Badge]: https://img.shields.io/badge/Hashnode-2962FF?style=for-the-badge&logo=hashnode&logoColor=white
-[LinkedIn-Badge]: https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white
-[StackOverflow-Badge]: https://img.shields.io/badge/Stack_Overflow-FE7A16?style=for-the-badge&logo=stack-overflow&logoColor=white
-[Twitter-Badge]: https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white
-[YouTube-Badge]: https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white
