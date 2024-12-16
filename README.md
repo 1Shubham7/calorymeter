@@ -7,10 +7,9 @@
 
 </div>
 
-
 ## README is WIP
 
-The "Mission Health" project aims to enhance fitness routines by leveraging human activity analysis and GPS data. This project focuses on using technology to analyze user activity patterns and GPS location data to provide users with improved fitness results.
+Calorymeter is a full stack application built using **Go + React**. It allows users to track their daily calorie intake and provides personalized diet recommendations based on their dietary habits using **Gemini**. Key features include email OTP validation for secure account verification, JWT-based authentication for scalable session management, and an intuitive calorie-tracking interface for effortless meal logging. Build automation is managed using a Makefile to streamline development and deployment.
 
 ⭐ Star us on GitHub — it motivates me a lot!
 
