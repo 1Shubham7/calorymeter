@@ -49,7 +49,7 @@ Calorymeter is a full stack application built using **Go + React**. It allows us
 
 ### Prerequisites
 
-- Before getting started, make sure you have the following prerequisites installed on your system:
+Before getting started, make sure you have the following prerequisites installed on your system:
 
 - Node.js (v12 or higher)
 - npm (Node Package Manager)
