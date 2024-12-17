@@ -2,22 +2,20 @@ package api
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/1shubham7/calorymeter/websocket"
-	"github.com/gin-gonic/gin"
 )
 
-func ServeWS(ctx *gin.Context) {
+func ServeWS(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
 
 	// Creating pool for websockets
-	pool := websocket.NewPool()
-	go pool.Start()
-
+	
 	// http.ResponseWriter ~ ctx.Writer
 	// http.Request ~ ctx.Request
-	conn, err := websocket.Upgrade(ctx.Writer, ctx.Request)
+	conn, err := websocket.Upgrade(w, r)
 	if err != nil {
-		fmt.Fprintf(ctx.Writer, "%+v\n", err)
+		fmt.Fprintf(w, "%+v\n", err)
 		return
 	}
 

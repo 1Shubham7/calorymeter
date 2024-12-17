@@ -28,10 +28,12 @@ const Entries = () => {
     getAllEntries();
   }, []);
 
-  if (refreshData) {
-    setRefreshData(false);
-    getAllEntries();
-  }
+  useEffect(() => {
+    if (refreshData) {
+      getAllEntries();
+      setRefreshData(false);
+    }
+  }, [refreshData]);
 
   return (
     <div>
