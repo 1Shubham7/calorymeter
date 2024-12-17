@@ -17,6 +17,7 @@ func main() {
 
 	router := gin.New()
 	router.Use(gin.Logger())
+	pool := cors.
 
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000"},
@@ -29,6 +30,8 @@ func main() {
 	router.POST("/signup", api.SignUpUser)
 	router.POST("/signupopt", api.SendOTPHandler)
 	router.POST("/login", api.Login)
+
+	router.GET("/ws", api.ServeWS)
 
 	router.GET("/entries", api.GetFoodEntries)
 	router.GET("/entry/:id", api.GetFoodEntryByID)
