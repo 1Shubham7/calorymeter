@@ -30,14 +30,6 @@ class Ws extends Component {
     render() {
       return (
         <div className="App">
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
           <ChatHistory chatHistory={this.state.chatHistory} />
           <ChatInput send={this.send} />
         </div>
