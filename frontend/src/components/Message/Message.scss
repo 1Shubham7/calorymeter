@@ -1,14 +1,22 @@
 .Message {
-    display: block;
-    background-color: #B2B1B9;
-    margin: 10px auto;
-    box-shadow: 0 5px 15px -5px rgba(0,0,0,.2);
-    padding: 10px 20px;
-    border-radius: 5px;
-    clear:both;
-  
-    &.me {
-      color: rgb(31, 28, 70);
-      float: right;
-    }
+  background-color: #ffffff;
+  padding: 12px 18px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: #333;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 10px 0;
+  max-width: 80%;
+  word-wrap: break-word;
+  transition: all 0.3s ease;
+
+  &:nth-child(odd) {
+    background-color: #f8f8f8;
   }
+
+  &:hover {
+    background-color: #f1f1f1;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+}
