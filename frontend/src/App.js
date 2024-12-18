@@ -10,6 +10,7 @@ import Hero from './components/Hero/Hero';
 import Me from './components/Me/Me';
 import QuoteOne from './components/QuoteOne/QuoteOne';
 import Ws from './components/Ws/Ws';
+import SignUp from './components/SignUp/SignUp';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
               <Footer />
             </>
           } />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="/ws" element={<Ws />} />
         </Routes>
       </div>

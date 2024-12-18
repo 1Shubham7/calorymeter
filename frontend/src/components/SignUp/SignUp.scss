@@ -1,0 +1,88 @@
+.SignUp {
+    * {
+      box-sizing: border-box;
+    }
+  
+    .bgImg {
+      background: url(https://images.unsplash.com/photo-1622667042273-e0e54442440a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80);
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      height: 100%;
+      position: absolute;
+      width: 100%;
+      z-index: -1;
+    }
+  
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      max-width: 500px;
+      width: 100%;
+      margin: auto;
+      position: relative;
+      z-index: 1;
+    }
+  
+    .container > form {
+      width: 70%;
+      border: 1px solid #dfdfdf;
+      padding: 20px;
+      border-radius: 5px;
+      background: #fff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+  
+    input {
+      width: calc(100% - 30px);
+      padding: 10px;
+      margin-top: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+  
+    pre {
+      width: 70%;
+      color: #fff;
+      font-size: larger;
+    }
+  
+    button {
+      background: #05b462;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      width: 100%;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+  
+      &:hover {
+        background: #039750;
+      }
+    }
+  
+    p {
+      color: rgb(255, 0, 0);
+      margin: 5px 0;
+    }
+  
+    .text {
+      margin-top: 10px;
+      padding: 5px;
+      font-size: 14px;
+      text-align: center;
+  
+      span {
+        color: rgb(0, 95, 236);
+        cursor: pointer;
+        text-decoration: underline;
+      }
+    }
+  }
+  
