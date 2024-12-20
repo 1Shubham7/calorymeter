@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/1shubham7/calorymeter/api"
+	"github.com/1shubham7/calorymeter/middleware"
 	"github.com/1shubham7/calorymeter/routes"
 	"github.com/1shubham7/calorymeter/websocket"
 )
@@ -25,7 +26,7 @@ func main() {
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		AllowCredentials: true,
 	}))
-	router.Use()
+	router.Use(middleware.PerClientTokenBucket())
 
 	pool := websocket.NewPool()
 	go pool.Start()

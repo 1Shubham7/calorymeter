@@ -10,7 +10,7 @@ import (
 	"golang.org/x/time/rate"
 )
 
-func PerClientTokenBucket(next func(c *gin.Context)) gin.HandlerFunc {
+func PerClientTokenBucket() gin.HandlerFunc {
 	type client struct {
 		limiter *rate.Limiter
 		lastSeen time.Time
@@ -50,11 +50,13 @@ func PerClientTokenBucket(next func(c *gin.Context)) gin.HandlerFunc {
 		clients[ip].lastSeen = time.Now()
 		if !clients[ip].limiter.Allow() {
 			mu.Unlock()
-
 			ctx.JSON(http.StatusTooManyRequests, gin.H{"error": "too many requests from the client"})
+			ctx.Abort() // Abort the request pipeline
+			// otherwise the request will still be processed
 			return
+		} else {
+			mu.Unlock()
+			ctx.Next()
 		}
-		mu.Unlock()
-		next(ctx)
 	})
 }
