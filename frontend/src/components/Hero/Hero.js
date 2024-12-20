@@ -3,14 +3,10 @@ import './hero.css';
 
 export default function Hero() {
   return (
-    <>
-      <div className="caltech-segment">
-        <div className="hero-text">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iure cum
-          harum accusantium!
-        </div>
-        <div></div>
+    <div className="hero-section">
+      <div className="hero-text">
+        Start your fitness journey with Calorymeter, track your daily calories, and get a personalized diet plan from our AI coach.
       </div>
-    </>
+    </div>
   );
 }
