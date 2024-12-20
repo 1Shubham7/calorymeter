@@ -1,13 +1,13 @@
 package websocket
 
 import (
-	"net/http"
 	"fmt"
+	"net/http"
 
 	"github.com/gorilla/websocket"
 )
 
-var upgrader = websocket.Upgrader {
+var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024, // Buffer size for incoming messages
 	WriteBufferSize: 1024, // Buffer size for outgoing messages
 }

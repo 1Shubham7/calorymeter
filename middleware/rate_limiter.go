@@ -12,25 +12,25 @@ import (
 
 func PerClientTokenBucket() gin.HandlerFunc {
 	type client struct {
-		limiter *rate.Limiter
+		limiter  *rate.Limiter
 		lastSeen time.Time
 	}
 
 	var (
-		mu sync.Mutex
+		mu      sync.Mutex
 		clients = make(map[string]*client)
 	)
 
-	go func () {
+	go func() {
 		for {
 			time.Sleep(time.Minute)
 			mu.Lock()
-		for ip, client := range clients {
-			if time.Since(client.lastSeen) > 3*time.Minute {
-				delete(clients, ip)
+			for ip, client := range clients {
+				if time.Since(client.lastSeen) > 3*time.Minute {
+					delete(clients, ip)
+				}
 			}
-		}
-		mu.Unlock()
+			mu.Unlock()
 		}
 	}()
 

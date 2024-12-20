@@ -1,17 +1,17 @@
 package websocket
 
 import (
-	"sync"
 	"log"
+	"sync"
 
 	"github.com/gorilla/websocket"
 )
 
 type Client struct {
-	ID string
+	ID   string
 	Conn *websocket.Conn
 	Pool *Pool
-	mu sync.Mutex
+	mu   sync.Mutex
 }
 
 type Message struct {
@@ -23,7 +23,7 @@ func (c *Client) Read() {
 	defer func() {
 		c.Pool.Unregister <- c
 		c.Conn.Close()
-	} ()
+	}()
 
 	for {
 		msgType, p, err := c.Conn.ReadMessage()

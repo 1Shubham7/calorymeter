@@ -18,16 +18,19 @@ function App() {
       <div>
         <Navbar />
         <Routes>
-          <Route path="/" element={
-            <>
-              <Hero />
-              <Entries />
-              <TipDisplay />
-              <QuoteOne />
-              <Me />
-              <Footer />
-            </>
-          } />
+          <Route
+            path="/"
+            element={
+              <>
+                <Hero />
+                <Entries />
+                <TipDisplay />
+                <QuoteOne />
+                <Me />
+                <Footer />
+              </>
+            }
+          />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/ws" element={<Ws />} />
         </Routes>

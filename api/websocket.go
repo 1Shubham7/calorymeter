@@ -10,7 +10,7 @@ import (
 func ServeWS(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
 
 	// Creating pool for websockets
-	
+
 	// http.ResponseWriter ~ ctx.Writer
 	// http.Request ~ ctx.Request
 	conn, err := websocket.Upgrade(w, r)

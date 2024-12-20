@@ -33,7 +33,7 @@ func (pool *Pool) Start() {
 				})
 			}
 			break
-		case client := <- pool.Unregister:
+		case client := <-pool.Unregister:
 			delete(pool.Clients, client)
 			fmt.Println("size of connection pool: ", len(pool.Clients))
 			for client := range pool.Clients {
@@ -43,7 +43,7 @@ func (pool *Pool) Start() {
 				})
 			}
 			break
-		case message := <- pool.Broadcast:
+		case message := <-pool.Broadcast:
 			for client := range pool.Clients {
 				err := client.Conn.WriteJSON(message)
 				if err != nil {

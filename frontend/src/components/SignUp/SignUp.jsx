@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
-import "./SignUp.scss";
+import { useState, useEffect } from 'react';
+import './SignUp.scss';
 
 export default function SignUp() {
   const initialValues = {
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
   };
   const [formValues, setFormValues] = useState(initialValues);
   const [formErrors, setFormErrors] = useState({});
@@ -25,7 +25,7 @@ export default function SignUp() {
 
   useEffect(() => {
     if (Object.keys(formErrors).length === 0 && isSubmit) {
-      console.log("Form Submitted: ", formValues);
+      console.log('Form Submitted: ', formValues);
     }
   }, [formErrors, formValues, isSubmit]);
 
@@ -33,19 +33,19 @@ export default function SignUp() {
     const errors = {};
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
     if (!values.username) {
-      errors.username = "Username is required!";
+      errors.username = 'Username is required!';
     }
     if (!values.email) {
-      errors.email = "Email is required!";
+      errors.email = 'Email is required!';
     } else if (!regex.test(values.email)) {
-      errors.email = "This is not a valid email format!";
+      errors.email = 'This is not a valid email format!';
     }
     if (!values.password) {
-      errors.password = "Password is required";
+      errors.password = 'Password is required';
     } else if (values.password.length < 4) {
-      errors.password = "Password must be more than 4 characters";
+      errors.password = 'Password must be more than 4 characters';
     } else if (values.password.length > 10) {
-      errors.password = "Password cannot exceed more than 10 characters";
+      errors.password = 'Password cannot exceed more than 10 characters';
     }
     if (values.password !== values.confirmPassword) {
       errors.confirmPassword = "Passwords didn't match. Try again.";

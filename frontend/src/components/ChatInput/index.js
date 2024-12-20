@@ -1,3 +1,3 @@
-import ChatInput from './ChatInput.jsx'
+import ChatInput from './ChatInput.jsx';
 
 export default ChatInput;
