@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/1shubham7/calorymeter/api"
+	"github.com/1shubham7/calorymeter/routes"
 	"github.com/1shubham7/calorymeter/websocket"
 )
 
@@ -29,25 +30,13 @@ func main() {
 	pool := websocket.NewPool()
 	go pool.Start()
 
-	router.POST("/food/create", api.AddFoodEntry)
-	router.POST("/signup", api.SignUpUser)
-	router.POST("/signupopt", api.SendOTPHandler)
-	router.POST("/login", api.Login)
-
 	router.GET("/ws", func(c *gin.Context) {
 		api.ServeWS(pool, c.Writer, c.Request)
 	})
 
-	router.GET("/entries", api.GetFoodEntries)
-	router.GET("/entry/:id", api.GetFoodEntryByID)
-	router.GET("/ingredient/:ingredient", api.GetFoodEntryByIngredient)
-
-	router.PUT("/entry/update/:id", api.UpdateFoodEntry)
-	router.PUT("/ingredient/update/:id", api.UpdateFoodIngredient)
-
-	router.DELETE("/entry/delete/:id", api.DeleteFoodEntry)
-
-	router.GET("/tip", api.GetTip)
+	routes.FoodRoutes(router)
+	routes.UserRoutes(router)
+	routes.TipRoutes(router)
 
 	router.Run(":" + port)
 }
