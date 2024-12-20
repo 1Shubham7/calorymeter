@@ -9,7 +9,7 @@
 
 ## README is WIP
 
-Calorymeter is a full stack application built using **Go + React**. It allows users to track their daily calorie intake and provides personalized diet recommendations based on their dietary habits using **Gemini**. Key features include **email OTP validation** for secure account verification and **JWT authentication** for scalable session management. Build automation is managed using a Makefile to streamline development and deployment.
+Calorymeter is a full-stack application built using **Go + React** that helps users track their daily calorie intake and provides personalized diet recommendations powered by the **Gemini API**. It features **email OTP validation** for secure account verification, **JWT authentication** for scalable session management, and incorporates **authentication middleware** and a **token bucket rate limiter** to enhance security and manage API traffic effectively. The application also includes a **real-time chat room** powered by **WebSockets** for seamless user communication. Build automation is streamlined using a **Makefile**, ensuring efficient development and deployment.
 
 ⭐ Star us on GitHub — it motivates me a lot!
 
@@ -24,8 +24,11 @@ Calorymeter is a full stack application built using **Go + React**. It allows us
 - **Backend Language:** Go (Golang)
 - **Database:** MongoDB
 - **Frontend Framework:** React
-- **Validation:** go-playground/validator
+- **Validation:** `go-playground/validator` for validating request payloads
 - **Authentication:** Email OTP validation and JWT authentication
+- **Middleware:** Authentication middleware and Rate Limiter
+- **Late Limiting:** using Token bucket rate limiter
+- **Real-Time Communication:** WebSockets for chat room functionality using `gorilla/websocket`
 - **Build and Commands:** Managed using Makefile
 
 ### Table of Contents
