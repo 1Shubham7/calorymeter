@@ -49,7 +49,7 @@ func AddFoodEntry(ctx *gin.Context) {
 
 func GetFoodEntries(ctx *gin.Context) {
 	context, cancel := context.WithTimeout(context.Background(), 100*time.Second)
-
+	defer cancel()
 	var foodEntries []bson.M
 	cursor, err := entryCollection.Find(context, bson.M{})
 	if err != nil {
@@ -65,8 +65,7 @@ func GetFoodEntries(ctx *gin.Context) {
 		fmt.Println(err)
 		return
 	}
-
-	defer cancel()
+	
 	fmt.Println(foodEntries)
 	ctx.JSON(http.StatusOK, foodEntries)
 }
@@ -188,6 +187,7 @@ func DeleteFoodEntry(ctx *gin.Context) {
 	docID, _ := primitive.ObjectIDFromHex(id)
 
 	context, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
 
 	result, err := entryCollection.DeleteOne(context, bson.M{"_id": docID})
 	if err != nil {
@@ -196,6 +196,5 @@ func DeleteFoodEntry(ctx *gin.Context) {
 		return
 	}
 
-	defer cancel()
 	ctx.JSON(http.StatusOK, result.DeletedCount)
 }

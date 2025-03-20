@@ -14,8 +14,7 @@ class ChatHistory extends Component {
         <h2>Calorymeter Chat</h2>
         <p align="center">
           {' '}
-          Please be respectful to others in the chat. or else I fuck you up you
-          son of a monkey!
+          Please be respectful to others in the chat.
         </p>
         {messages}
       </div>

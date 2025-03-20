@@ -13,7 +13,7 @@ export default function Navbar() {
             <a href="/">Calorymeter</a>
           </div>
           <p>
-            <a href="#facb">Track your calories</a>
+            <a href="#track">Track your calories</a>
           </p>
           <p>
             <a href="#about">About</a>
@@ -22,7 +22,7 @@ export default function Navbar() {
             <a href="#community">Community</a>
           </p>
           <p>
-            <a href="https://github.com/1Shubham7/calorymeter">GitHub</a>
+            <a href="https://github.com/1Shubham7/calorymeter" target="_blank" rel="noopener noreferrer">GitHub</a>
           </p>
         </div>
       </div>
@@ -47,10 +47,10 @@ export default function Navbar() {
           <div className="navbar-menu_container scale-up-center">
             <div className="navbar-menu_container-links">
               <p>
-                <a href="/">Coding Buddy</a>
+                <a href="/">Calorymeter</a>
               </p>
               <p>
-                <a href="#facb">Find a Coding Buddy</a>
+                <a href="#track">Track your calories</a>
               </p>
               <p>
                 <a href="#about">About</a>
@@ -59,7 +59,7 @@ export default function Navbar() {
                 <a href="#community">Community</a>
               </p>
               <p>
-                <a href="https://github.com/1Shubham7/code-buddy">GitHub</a>
+                <a href="https://github.com/1Shubham7/calorymeter" target="_blank" rel="noopener noreferrer">GitHub</a>
               </p>
             </div>
             <div className="navbar-menu_container-links-sign">

@@ -25,14 +25,13 @@ func GetTip(ctx *gin.Context) {
 
 	var foodEntries []bson.M
 	contextT, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
 	cursor, err := entryCollection.Find(contextT, bson.M{})
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		fmt.Println(err)
 		return
-	}
-
-	defer cancel()
+	}	
 
 	err = cursor.All(ctx, &foodEntries)
 
@@ -74,9 +73,8 @@ func GetTip(ctx *gin.Context) {
 	builder.WriteString(`\n
 	Firstly, Tell me if today's day was a plus or a minus in my weight loss journey.
 	Give me 3 short key points as advices for loosing my weight or gaining acc. to the food I ate.
-	I know you are not a docter, but give me some advices (don't mention you are a docker, I know it already).
+	I know you are not a docter, but give me some advices (don't mention you are a docter, I know it already).
 	Also use emojis in your response.
-	You answer must be in tags, consider as if you are giving me code for a middle of a react component (don't use html tags).
 	Also if the data I am giving is wrong or insufficient, just mention that in a funny way.
 	`)
 

@@ -6,8 +6,7 @@ export default function QuoteOne() {
     <>
       <div className="quote-box">
         <div className="quote-text">
-          “Hey my friend, You are so much fat that when the family has their
-          picture taken, you’re the background.”
+          “Kickstart your fitness journey with Calorymeter—track your calories, stay on top of your goals, and get a personalized diet plan from our AI coach!”
         </div>
       </div>
     </>

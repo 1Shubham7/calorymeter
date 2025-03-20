@@ -12,13 +12,13 @@ import (
 
 func PerClientTokenBucket() gin.HandlerFunc {
 	type client struct {
-		limiter  *rate.Limiter
+		limiter  *rate.Limiter // that applies token bucket
 		lastSeen time.Time
 	}
 
 	var (
 		mu      sync.Mutex
-		clients = make(map[string]*client)
+		clients = make(map[string]*client) // map[IP]client
 	)
 
 	go func() {
@@ -42,9 +42,10 @@ func PerClientTokenBucket() gin.HandlerFunc {
 			return
 		}
 
-		// Lock the mutex to protect this section from race conditions.
 		mu.Lock()
 		if _, found := clients[ip]; !found {
+			// add new client
+			// 2 requests/sec, burst size = 5
 			clients[ip] = &client{limiter: rate.NewLimiter(2, 5)}
 		}
 		clients[ip].lastSeen = time.Now()

@@ -14,10 +14,13 @@ var upgrader = websocket.Upgrader{
 
 func Upgrade(w http.ResponseWriter, r *http.Request) (*websocket.Conn, error) {
 
+	// checkorigin is made a func that always returns true
+	// meaning it will always accept WebSocket connection requests, regardless of the origin.
 	upgrader.CheckOrigin = func(r *http.Request) bool {
 		return true
 	}
 
+	// r is upgraded to a WebSocket connection
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		fmt.Println(err)

@@ -2,12 +2,11 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 
-import Entries from './components/entries.components';
+import Entries from './components/Food/entries.components';
 import TipDisplay from './components/AI/tip';
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
 import Hero from './components/Hero/Hero';
-import Me from './components/Me/Me';
 import QuoteOne from './components/QuoteOne/QuoteOne';
 import Ws from './components/Ws/Ws';
 import SignUp from './components/SignUp/SignUp';
@@ -26,7 +25,7 @@ function App() {
                 <Entries />
                 <TipDisplay />
                 <QuoteOne />
-                <Me />
+                {/* <Me /> */}
                 <Footer />
               </>
             }

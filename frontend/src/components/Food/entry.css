@@ -1,0 +1,98 @@
+/* entry.css */
+.entry-card {
+    background-color: var(--card-background);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+  }
+  
+  .entry-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .entry-content {
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .entry-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    flex: 1;
+  }
+  
+  .entry-field {
+    min-width: 160px;
+  }
+  
+  .field-label {
+    font-weight: 600;
+    color: #666;
+    margin-right: 6px;
+  }
+  
+  .field-value {
+    color: #333;
+  }
+  
+  .entry-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .edit-button {
+    background-color: #226edf;
+    color: white;
+  }
+  
+  .edit-button:hover {
+    background-color: #8cbaff;
+  }
+  
+  .update-button {
+    background-color: #226edf;
+    color: white;
+  }
+  
+  .update-button:hover {
+    background-color: #8cbaff;
+  }
+  
+  .delete-button {
+    background-color: #d71e1e;
+    color: white;
+  }
+  
+  .delete-button:hover {
+    background-color: #d65c5c;
+  }
+  
+  @media (max-width: 768px) {
+    .entry-content {
+      flex-direction: column;
+    }
+    
+    .entry-info {
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .entry-field {
+      min-width: unset;
+    }
+    
+    .entry-actions {
+      justify-content: space-between;
+    }
+    
+    .entry-actions button {
+      flex: 1;
+    }
+  }
