@@ -28,6 +28,10 @@ func main() {
 	}))
 	router.Use(middleware.PerClientTokenBucket())
 
+	// these will require authentication
+	authRoutes := router.Group("/")
+	authRoutes.Use(middleware.Authentication())
+
 	pool := websocket.NewPool()
 	go pool.Start()
 
