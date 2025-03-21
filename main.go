@@ -29,7 +29,7 @@ func main() {
 	router.Use(middleware.PerClientTokenBucket())
 
 	// these will require authentication
-	authRoutes := router.Group("/")
+	authRoutes := router.Group("/food")
 	authRoutes.Use(middleware.Authentication())
 
 	pool := websocket.NewPool()
