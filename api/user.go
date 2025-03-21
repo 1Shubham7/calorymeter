@@ -51,7 +51,7 @@ func SignUpUser(ctx *gin.Context) {
 	}
 
 	//OTP Validation
-	otpFilter := bson.M{"email": user.Email}
+	otpFilter := bson.M{"otp": user.OTP}
 	var otpHandler models.OTPHandler
 
 	err = otpCollection.FindOne(c, otpFilter).Decode(&otpHandler)
