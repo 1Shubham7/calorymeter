@@ -55,7 +55,7 @@ func GetTip(ctx *gin.Context) {
 	}
 	defer client.Close()
 
-	model := client.GenerativeModel("gemini-1.5-flash")
+	model := client.GenerativeModel("gemini-2.0-flash-lite")
 
 	// var query string
 	// foodEntries is a slice of maps

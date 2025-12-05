@@ -1,121 +1,245 @@
-import { useState, useEffect } from 'react';
-import './SignUp.scss';
+import React, { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.css';
 
-export default function SignUp() {
-  const initialValues = {
-    username: '',
+const SignUp = () => {
+  const [step, setStep] = useState(1); // 1: Send OTP, 2: Verify OTP & Complete Signup
+  const [formData, setFormData] = useState({
     email: '',
+    username: '',
+    firstName: '',
+    lastName: '',
     password: '',
-    confirmPassword: '',
-  };
-  const [formValues, setFormValues] = useState(initialValues);
-  const [formErrors, setFormErrors] = useState({});
-  const [isSubmit, setIsSubmit] = useState(false);
+    otp: ''
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+    setError('');
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setFormErrors(validate(formValues));
-    setIsSubmit(true);
+  const handleSendOTP = async () => {
+    setLoading(true);
+    setError('');
+    setSuccess('');
+
+    try {
+      const response = await fetch('http://localhost:8000/signupopt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          username: formData.username
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSuccess('OTP sent to your email! Please check your inbox.');
+        setStep(2);
+      } else {
+        setError(data.error || 'Failed to send OTP');
+      }
+    } catch (err) {
+      setError('Network error. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  useEffect(() => {
-    if (Object.keys(formErrors).length === 0 && isSubmit) {
-      console.log('Form Submitted: ', formValues);
-    }
-  }, [formErrors, formValues, isSubmit]);
+  const handleSignUp = async () => {
+    setLoading(true);
+    setError('');
+    setSuccess('');
 
-  const validate = (values) => {
-    const errors = {};
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-    if (!values.username) {
-      errors.username = 'Username is required!';
+    try {
+      const payload = {
+        email: formData.email,
+        username: formData.username,
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        password: formData.password,
+        hashed_password: formData.password,
+        otp: parseInt(formData.otp)
+      };
+      
+      console.log('Sending payload:', payload);
+      
+      const response = await fetch('http://localhost:8000/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSuccess('Account created successfully!');
+        // Store token if needed
+        if (data.user?.token) {
+          localStorage.setItem('token', data.user.token);
+        }
+        // Redirect to login or home page after 2 seconds
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 2000);
+      } else {
+        setError(data.error || 'Failed to create account');
+      }
+    } catch (err) {
+      setError('Network error. Please try again.');
+    } finally {
+      setLoading(false);
     }
-    if (!values.email) {
-      errors.email = 'Email is required!';
-    } else if (!regex.test(values.email)) {
-      errors.email = 'This is not a valid email format!';
-    }
-    if (!values.password) {
-      errors.password = 'Password is required';
-    } else if (values.password.length < 4) {
-      errors.password = 'Password must be more than 4 characters';
-    } else if (values.password.length > 10) {
-      errors.password = 'Password cannot exceed more than 10 characters';
-    }
-    if (values.password !== values.confirmPassword) {
-      errors.confirmPassword = "Passwords didn't match. Try again.";
-    }
-    return errors;
   };
 
   return (
-    <div className="SignUp">
-      <div className="bgImg"></div>
-      <div className="container">
-        {Object.keys(formErrors).length === 0 && isSubmit && (
-          <div className="ui message success">Signed in successfully</div>
-        )}
+    <div className="container mt-5 mb-5">
+      <div className="row justify-content-center">
+        <div className="col-md-6">
+          <div className="card shadow">
+            <div className="card-body p-5">
+              <h2 className="text-center mb-4">Sign Up</h2>
 
-        <form onSubmit={handleSubmit}>
-          <h1>Sign Up</h1>
-          <div className="ui divider"></div>
-          <div className="ui form">
-            <div className="field">
-              <label>Username</label>
-              <input
-                type="text"
-                name="username"
-                placeholder="Choose a username"
-                value={formValues.username}
-                onChange={handleChange}
-              />
+              {error && (
+                <div className="alert alert-danger" role="alert">
+                  {error}
+                </div>
+              )}
+
+              {success && (
+                <div className="alert alert-success" role="alert">
+                  {success}
+                </div>
+              )}
+
+              {step === 1 ? (
+                <div>
+                  <div className="mb-3">
+                    <label htmlFor="email" className="form-label">Email</label>
+                    <input
+                      type="email"
+                      className="form-control"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label htmlFor="username" className="form-label">Username</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="username"
+                      name="username"
+                      value={formData.username}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+
+                  <button 
+                    onClick={handleSendOTP}
+                    className="btn btn-primary w-100"
+                    disabled={loading || !formData.email || !formData.username}
+                  >
+                    {loading ? 'Sending...' : 'Send OTP'}
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  <div className="mb-3">
+                    <label htmlFor="firstName" className="form-label">First Name</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="firstName"
+                      name="firstName"
+                      value={formData.firstName}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label htmlFor="lastName" className="form-label">Last Name</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="lastName"
+                      name="lastName"
+                      value={formData.lastName}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label htmlFor="password" className="form-label">Password</label>
+                    <input
+                      type="password"
+                      className="form-control"
+                      id="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label htmlFor="otp" className="form-label">OTP (Check your email)</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="otp"
+                      name="otp"
+                      value={formData.otp}
+                      onChange={handleChange}
+                      placeholder="Enter 4-digit OTP"
+                      required
+                    />
+                  </div>
+
+                  <button 
+                    onClick={handleSignUp}
+                    className="btn btn-success w-100"
+                    disabled={loading || !formData.firstName || !formData.lastName || !formData.password || !formData.otp}
+                  >
+                    {loading ? 'Creating Account...' : 'Complete Sign Up'}
+                  </button>
+
+                  <button
+                    onClick={() => setStep(1)}
+                    className="btn btn-link w-100 mt-2"
+                  >
+                    Back to Email Verification
+                  </button>
+                </div>
+              )}
+
+              <div className="text-center mt-3">
+                <p>Already have an account? <a href="/login">Login</a></p>
+              </div>
             </div>
-            <p>{formErrors.username}</p>
-            <div className="field">
-              <label>Email</label>
-              <input
-                type="text"
-                name="email"
-                placeholder="Email"
-                value={formValues.email}
-                onChange={handleChange}
-              />
-            </div>
-            <p>{formErrors.email}</p>
-            <div className="field">
-              <label>Password</label>
-              <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                value={formValues.password}
-                onChange={handleChange}
-              />
-            </div>
-            <p>{formErrors.password}</p>
-            <div className="field">
-              <label>Confirm Password</label>
-              <input
-                type="password"
-                name="confirmPassword"
-                placeholder="Confirm password"
-                value={formValues.confirmPassword}
-                onChange={handleChange}
-              />
-            </div>
-            <p>{formErrors.confirmPassword}</p>
-            <button className="fluid ui button blue">Submit</button>
           </div>
-        </form>
-        <div className="text">
-          Already have an account? <span>Login</span>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default SignUp;

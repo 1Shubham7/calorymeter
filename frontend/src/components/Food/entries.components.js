@@ -35,7 +35,7 @@ const Entries = () => {
   return (
     <div className="entries-container">
       <header className="app-header">
-        <h1>Calorie Tracker</h1>
+        <h1>CaloriTrack</h1>
         <button 
           className="primary-button" 
           onClick={() => setAddNewEntry(true)}

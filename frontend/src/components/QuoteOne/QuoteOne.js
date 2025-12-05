@@ -6,7 +6,7 @@ export default function QuoteOne() {
     <>
       <div className="quote-box">
         <div className="quote-text">
-          “Kickstart your fitness journey with Calorymeter—track your calories, stay on top of your goals, and get a personalized diet plan from our AI coach!”
+          Kickstart your fitness journey with CaloriTrack - Track your calories, stay on top of your goals, and get a personalized diet plan from our AI coach!
         </div>
       </div>
     </>

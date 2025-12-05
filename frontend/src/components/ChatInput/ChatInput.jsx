@@ -7,7 +7,7 @@ class ChatInput extends Component {
       <div className="ChatInput">
         <input
           onKeyDown={this.props.send}
-          placeholder="I only believe in Jassi bhai..."
+          placeholder="Write a new message..."
         />
       </div>
     );
