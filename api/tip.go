@@ -55,7 +55,7 @@ func GetTip(ctx *gin.Context) {
 	}
 	defer client.Close()
 
-	model := client.GenerativeModel("gemini-2.0-flash-lite")
+	model := client.GenerativeModel("gemini-2.5-flash")
 
 	// var query string
 	// foodEntries is a slice of maps
@@ -71,11 +71,12 @@ func GetTip(ctx *gin.Context) {
 		builder.WriteString("\n")
 	}
 	builder.WriteString(`\n
-	Firstly, Tell me if today's day was a plus or a minus in my weight loss journey.
-	Give me 3 short key points as advices for loosing my weight or gaining acc. to the food I ate.
+	Tell me if today's day was a plus or a minus in my weight loss journey.
+	Give me 3 short advices for loosing my weight or gaining acc..
 	I know you are not a docter, but give me some advices (don't mention you are a docter, I know it already).
 	Also use emojis in your response.
-	Also if the data I am giving is wrong or insufficient, just mention that in a funny way.
+	Also if data I am giving is insufficient, just mention that in funny way. my BMR is 2300 cal, weight is 80Kg.
+	This is my total calories for the day:
 	`)
 
 	query := builder.String()
