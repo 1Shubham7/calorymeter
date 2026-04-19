@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './navbar.css';
 import { RiMenu3Line, RiCloseLine } from 'react-icons/ri';
 
-export default function Navbar() {
+export default function Navbar({ isAuthenticated, onLogout }) {
   const [toggleMenu, setToggleMenu] = useState(false);
 
   return (
@@ -30,12 +30,25 @@ export default function Navbar() {
         </div>
       </div>
       <div className="navbar-sign">
-        <a className="navbar-ghost-link" href="http://localhost:8080/" target="_blank" rel="noopener noreferrer">
-          Image recognition
-        </a>
-        <a className="navbar-primary-link" href="/signup">
-          Create account
-        </a>
+        {isAuthenticated ? (
+          <>
+            <a className="navbar-ghost-link" href="http://localhost:8080/" target="_blank" rel="noopener noreferrer">
+              Image recognition
+            </a>
+            <button className="navbar-primary-link navbar-button-reset" type="button" onClick={onLogout}>
+              Logout
+            </button>
+          </>
+        ) : (
+          <>
+            <a className="navbar-ghost-link" href="/login">
+              Login
+            </a>
+            <a className="navbar-primary-link" href="/signup">
+              Create account
+            </a>
+          </>
+        )}
       </div>
       <div className="navbar-menu">
         {toggleMenu ? (
@@ -74,12 +87,25 @@ export default function Navbar() {
               </p>
             </div>
             <div className="navbar-menu_container-links-sign">
-              <a className="navbar-menu_link" href="http://localhost:8080/" target="_blank" rel="noopener noreferrer">
-                Image recognition
-              </a>
-              <a className="navbar-menu_button" href="/signup">
-                Create account
-              </a>
+              {isAuthenticated ? (
+                <>
+                  <a className="navbar-menu_link" href="http://localhost:8080/" target="_blank" rel="noopener noreferrer">
+                    Image recognition
+                  </a>
+                  <button className="navbar-menu_button navbar-button-reset" type="button" onClick={onLogout}>
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <a className="navbar-menu_link" href="/login">
+                    Login
+                  </a>
+                  <a className="navbar-menu_button" href="/signup">
+                    Create account
+                  </a>
+                </>
+              )}
             </div>
           </div>
         )}

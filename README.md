@@ -6,12 +6,13 @@
   ![GitHub top language](https://img.shields.io/github/languages/top/1Shubham7/calorymeter)
 </div>
 
-Calorymeter is a full-stack calorie tracking project built with Go, React, MongoDB, WebSockets, JWT auth, email OTP signup, and Gemini-powered AI tips.
+Calorymeter is a full-stack calorie tracking project built with Go, React, MongoDB, WebSockets, JWT auth, email OTP signup, Gemini-powered AI tips, and a local ML service for calorie estimation.
 
-This README now covers the main app in this repo:
+This README covers the main app in this repo:
 
 - Go backend in the repo root
 - React frontend in `frontend/`
+- ML calorie estimation service in `ml-service/`
 
 For the separate food photo analyzer subproject, see [food-recorgnition/SETUP.md](./food-recorgnition/SETUP.md).
 
@@ -23,17 +24,24 @@ For the separate food photo analyzer subproject, see [food-recorgnition/SETUP.md
 - Auth: JWT + OTP signup flow
 - AI tips: Gemini API
 - Real-time chat: WebSockets
+- Calorie estimation: Python, Flask, sentence-transformers (`all-MiniLM-L6-v2`), USDA food database
 
 ## Project Structure
 
 ```text
 .
-├── main.go              # Go backend
-├── api/                 # handlers
+├── main.go              # Go backend entry point
+├── api/                 # request handlers
 ├── routes/              # route registration
 ├── db/                  # MongoDB connection
+├── models/              # data models
+├── middleware/          # JWT auth, rate limiting
+├── ml-service/          # calorie estimation ML service
+│   ├── app.py           # Flask server (runs on :5001)
+│   ├── setup.py         # one-time USDA data download
+│   └── requirements.txt # Python dependencies
 ├── frontend/            # React frontend
-└── food-recorgnition/   # separate subproject
+└── food-recorgnition/   # separate image recognition subproject
 ```
 
 ## Prerequisites
@@ -43,6 +51,7 @@ Install these before running locally:
 1. Go
 2. Node.js and npm
 3. MongoDB
+4. Python 3.8+
 
 What I verified on this machine:
 
@@ -140,6 +149,43 @@ Important project-specific notes:
 - If MongoDB is not running, the server will fail at startup.
 - If port `8000` is already busy, stop the other process using it first.
 
+## ML Service Setup (Calorie Estimation)
+
+The calorie estimation feature runs as a separate Python service on port `5001`. The Go backend proxies requests to it when the user clicks **Calculate Calories** in the UI.
+
+### Step 1 — Install Python dependencies
+
+```bash
+cd ml-service
+pip install -r requirements.txt
+```
+
+### Step 2 — Download the food database (one-time)
+
+```bash
+python setup.py
+```
+
+This downloads the USDA SR Legacy food database (~9 MB) and saves a clean `foods.csv` with ~7,700 real food items locally. Only needs to be run once.
+
+### Step 3 — Start the ML service
+
+```bash
+python app.py
+```
+
+On the first run it downloads the `all-MiniLM-L6-v2` sentence transformer model (~90 MB from HuggingFace) and computes embeddings for all foods (~15 seconds on CPU). Both are cached to disk, so every subsequent run starts in seconds.
+
+Expected output when ready:
+
+```text
+Service ready. Listening on http://localhost:5001
+```
+
+The service must be running for the **Calculate Calories** button in the UI to work. If it is not running, the button will show an error and the user can still enter calories manually.
+
+> For details on how the model works, see [docs/calorie-model-explained.md](./docs/calorie-model-explained.md).
+
 ## Run The React Frontend
 
 From another terminal:
@@ -160,18 +206,24 @@ The frontend talks directly to the Go backend on port `8000`, so the backend sho
 
 ## Full Local Run Flow
 
-Open terminal 1:
+Open terminal 1 — ML service:
 
 ```bash
-cd /home/shubham/Code/Personal/calorymeter
+cd ml-service
+python app.py
+```
+
+Open terminal 2 — Go backend:
+
+```bash
 export PRIVATE_KEY="replace-this-with-a-long-random-secret"
 go run main.go
 ```
 
-Open terminal 2:
+Open terminal 3 — React frontend:
 
 ```bash
-cd /home/shubham/Code/Personal/calorymeter/frontend
+cd frontend
 npm ci
 npm start
 ```
@@ -247,6 +299,21 @@ Check that:
 1. the Go backend is running
 2. it is listening on `http://localhost:8000`
 3. MongoDB is running
+
+### "Could not estimate calories" in the UI
+
+The ML service is not running. Start it:
+
+```bash
+cd ml-service
+python app.py
+```
+
+If `foods.csv` is missing, run `python setup.py` first.
+
+### ML service fails to import pandas / bz2
+
+Your Python was compiled without `libbz2` support (common with pyenv). The ML service does not use pandas — if you see this error, make sure you are running `app.py` from the `ml-service/` directory and using the correct Python environment where `pip install -r requirements.txt` was run.
 
 ### `/tip` fails
 

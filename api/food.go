@@ -44,7 +44,7 @@ func AddFoodEntry(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, result)
+	ctx.JSON(http.StatusCreated, result)
 }
 
 func GetFoodEntries(ctx *gin.Context) {
@@ -65,7 +65,7 @@ func GetFoodEntries(ctx *gin.Context) {
 		fmt.Println(err)
 		return
 	}
-	
+
 	fmt.Println(foodEntries)
 	ctx.JSON(http.StatusOK, foodEntries)
 }

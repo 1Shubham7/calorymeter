@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 import './entries.css';
 import Entry from './single-entry.component';
 import ImageRecognition from '../ImageRecognition/ImageRecognition';
 
-const Entries = () => {
+const Entries = ({ isAuthenticated }) => {
   const [entries, setEntries] = useState([]);
-  const [refreshData, setRefreshData] = useState(false);
+  const [requestError, setRequestError] = useState('');
   const [changeEntry, setChangeEntry] = useState({ change: false, id: 0 });
   const [changeIngredient, setChangeIngredient] = useState({
     change: false,
@@ -17,20 +17,71 @@ const Entries = () => {
   const [newEntry, setNewEntry] = useState({
     dish: '',
     ingredients: '',
-    calories: 0,
-    fat: 0,
+    calories: '',
+    fat: '',
   });
+  const [calcLoading, setCalcLoading] = useState(false);
+  const [calcError, setCalcError]   = useState('');
+  const [calcMatch, setCalcMatch]   = useState('');
+  const token = localStorage.getItem('token');
+  const authHeaders = useMemo(() => (
+    token
+      ? {
+          Authorization: `Bearer ${token}`,
+        }
+      : {}
+  ), [token]);
+
+  const getAllEntries = useCallback(() => {
+    var url = 'http://localhost:8000/food/entries';
+    axios
+      .get(url, {
+        responseType: 'json',
+        headers: authHeaders,
+      })
+      .then((response) => {
+        if (response.status >= 200 && response.status < 300) {
+          setEntries(response.data);
+          setRequestError('');
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching entries:', error);
+        setRequestError(error?.response?.data?.error || 'Failed to fetch entries.');
+      });
+  }, [authHeaders]);
 
   useEffect(() => {
-    getAllEntries();
-  }, []);
-
-  useEffect(() => {
-    if (refreshData) {
+    if (isAuthenticated) {
       getAllEntries();
-      setRefreshData(false);
     }
-  }, [refreshData]);
+  }, [getAllEntries, isAuthenticated]);
+
+  if (!isAuthenticated) {
+    return (
+      <section className="entries-section" id="track">
+        <div className="entries-container">
+          <div className="entries-auth-gate">
+            <p className="entries-eyebrow">Login required</p>
+            <h2>Log in before you create or review calorie entries.</h2>
+            <p className="entries-lead">
+              CaloriTrack keeps meal tracking, AI tips, and image-recognition
+              follow-up behind your account. Create an account or log in first
+              to start using the tracker.
+            </p>
+            <div className="entries-actions-row">
+              <a className="entries-auth-link entries-auth-primary" href="/login">
+                Log in
+              </a>
+              <a className="entries-auth-link entries-auth-secondary" href="/signup">
+                Create account
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="entries-section" id="track">
@@ -62,6 +113,9 @@ const Entries = () => {
         </div>
 
         <div className="entries-list">
+          {requestError && (
+            <div className="entries-request-error">{requestError}</div>
+          )}
           {entries != null && entries.length > 0 ? (
             entries.map((entry) => (
               <Entry
@@ -84,11 +138,11 @@ const Entries = () => {
         </div>
 
         {addNewEntry && (
-          <div className="modal-overlay" onClick={() => setAddNewEntry(false)}>
+          <div className="modal-overlay" onClick={() => { setAddNewEntry(false); setCalcError(''); setCalcMatch(''); }}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
               <div className="modal-header">
                 <h2>Add Calorie Entry</h2>
-                <button className="close-button" onClick={() => setAddNewEntry(false)}>×</button>
+                <button className="close-button" onClick={() => { setAddNewEntry(false); setCalcError(''); setCalcMatch(''); }}>×</button>
               </div>
 
               <div className="modal-body">
@@ -96,30 +150,50 @@ const Entries = () => {
                   <label>Dish</label>
                   <input
                     type="text"
+                    value={newEntry.dish}
                     onChange={(event) => {
                       setNewEntry({...newEntry, dish: event.target.value});
                     }}
                   />
-                  
+
                   <label>Ingredients</label>
                   <input
                     type="text"
+                    value={newEntry.ingredients}
                     onChange={(event) => {
                       setNewEntry({...newEntry, ingredients: event.target.value});
                     }}
                   />
-                  
+
+                  <button
+                    type="button"
+                    className="calc-button"
+                    onClick={() => calculateCalories()}
+                    disabled={calcLoading || !newEntry.dish.trim()}
+                  >
+                    {calcLoading ? 'Calculating...' : '✦ Calculate Calories'}
+                  </button>
+
+                  {calcError && (
+                    <p className="calc-error">{calcError}</p>
+                  )}
+                  {calcMatch && !calcError && (
+                    <p className="calc-match">Matched: {calcMatch}</p>
+                  )}
+
                   <label>Calories</label>
                   <input
                     type="number"
+                    value={newEntry.calories}
                     onChange={(event) => {
                       setNewEntry({...newEntry, calories: event.target.value});
                     }}
                   />
-                  
+
                   <label>Fat (g)</label>
                   <input
                     type="number"
+                    value={newEntry.fat}
                     onChange={(event) => {
                       setNewEntry({...newEntry, fat: event.target.value});
                     }}
@@ -128,7 +202,7 @@ const Entries = () => {
                 
                 <div className="button-group">
                   <button className="primary-button" onClick={() => addSingleEntry()}>Add</button>
-                  <button className="secondary-button" onClick={() => setAddNewEntry(false)}>Cancel</button>
+                  <button className="secondary-button" onClick={() => { setAddNewEntry(false); setCalcError(''); setCalcMatch(''); }}>Cancel</button>
                 </div>
               </div>
             </div>
@@ -218,81 +292,124 @@ const Entries = () => {
     </section>
   );
 
-  function changeIngredientForEntry() {
-    setChangeIngredient({ change: false, id: 0 });
-    var url = 'http://localhost:8000/food/ingredient/update/' + changeIngredient.id;
-    axios
-      .put(url, {
-        ingredients: newIngredientName,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          setRefreshData(true);
+  async function calculateCalories() {
+    setCalcError('');
+    setCalcMatch('');
+    setCalcLoading(true);
+    try {
+      const response = await axios.post(
+        'http://localhost:8000/food/calculate-calories',
+        { dish: newEntry.dish, ingredients: newEntry.ingredients },
+        { headers: authHeaders },
+      );
+      if (response.status >= 200 && response.status < 300) {
+        setNewEntry(prev => ({
+          ...prev,
+          calories: response.data.calories,
+          fat:      response.data.fat,
+        }));
+        if (response.data.matched_food) {
+          setCalcMatch(response.data.matched_food);
         }
-      })
-      .catch(error => console.error('Error updating ingredient:', error));
+      }
+    } catch (error) {
+      setCalcError(
+        error?.response?.data?.error ||
+        'Could not estimate calories. You can still enter them manually.'
+      );
+    } finally {
+      setCalcLoading(false);
+    }
   }
 
-  function changeSingleEntry() {
-    setChangeEntry({ change: false, id: 0 });
+  async function changeIngredientForEntry() {
+    setRequestError('');
+    var url = 'http://localhost:8000/food/ingredient/update/' + changeIngredient.id;
+    try {
+      const response = await axios.put(url, {
+        ingredients: newIngredientName,
+      }, {
+        headers: authHeaders,
+      });
+
+      if (response.status >= 200 && response.status < 300) {
+        setChangeIngredient({ change: false, id: 0 });
+        await getAllEntries();
+      }
+    } catch (error) {
+      console.error('Error updating ingredient:', error);
+      setRequestError(error?.response?.data?.error || 'Failed to update ingredients.');
+    }
+  }
+
+  async function changeSingleEntry() {
+    setRequestError('');
     var url = 'http://localhost:8000/food/entry/update/' + changeEntry.id;
-    axios
-      .put(url, {
+    try {
+      const response = await axios.put(url, {
         dish: newEntry.dish, 
         ingredients: newEntry.ingredients, 
         calories: parseInt(newEntry.calories, 10) || 0, 
         fat: parseFloat(newEntry.fat) || 0, 
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          setRefreshData(true);
-        }
-      })
-      .catch(error => console.error('Error updating entry:', error));
+      }, {
+        headers: authHeaders,
+      });
+
+      if (response.status >= 200 && response.status < 300) {
+        setChangeEntry({ change: false, id: 0 });
+        await getAllEntries();
+      }
+    } catch (error) {
+      console.error('Error updating entry:', error);
+      setRequestError(error?.response?.data?.error || 'Failed to update entry.');
+    }
   }
 
-  function addSingleEntry() {
-    setAddNewEntry(false);
+  async function addSingleEntry() {
+    setRequestError('');
     var url = 'http://localhost:8000/food/create';
-    axios
-      .post(url, {
+    try {
+      const response = await axios.post(url, {
         ingredients: newEntry.ingredients,
         dish: newEntry.dish,
         calories: parseFloat(newEntry.calories),
         fat: parseFloat(newEntry.fat),
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          setRefreshData(true);
-        }
-      })
-      .catch(error => console.error('Error creating entry:', error));
+      }, {
+        headers: authHeaders,
+      });
+
+      if (response.status >= 200 && response.status < 300) {
+        setAddNewEntry(false);
+        setCalcError('');
+        setCalcMatch('');
+        setNewEntry({
+          dish: '',
+          ingredients: '',
+          calories: '',
+          fat: '',
+        });
+        await getAllEntries();
+      }
+    } catch (error) {
+      console.error('Error creating entry:', error);
+      setRequestError(error?.response?.data?.error || 'Failed to create entry.');
+    }
   }
 
-  function deleteSingleEntry(id) {
+  async function deleteSingleEntry(id) {
     var url = 'http://localhost:8000/food/entry/delete/' + id;
-    axios
-      .delete(url)
-      .then((response) => {
-        if (response.status === 200) {
-          setRefreshData(true);
-        }
-      })
-      .catch(error => console.error('Error deleting entry:', error));
-  }
+    try {
+      const response = await axios.delete(url, {
+        headers: authHeaders,
+      });
 
-  function getAllEntries() {
-    var url = 'http://localhost:8000/food/entries';
-    axios
-      .get(url, {
-        responseType: 'json',
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          setEntries(response.data);
-        }
-      })
-      .catch(error => console.error('Error fetching entries:', error));
+      if (response.status >= 200 && response.status < 300) {
+        await getAllEntries();
+      }
+    } catch (error) {
+      console.error('Error deleting entry:', error);
+      setRequestError(error?.response?.data?.error || 'Failed to delete entry.');
+    }
   }
 };
 

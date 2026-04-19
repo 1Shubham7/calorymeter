@@ -122,13 +122,13 @@ func Login(ctx *gin.Context) {
 	var user models.User
 	var userFromDb models.User
 
-	err := ctx.BindJSON(user)
+	err := ctx.BindJSON(&user)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	err = userCollection.FindOne(c, bson.M{"email": user.Email}).Decode(userFromDb)
+	err = userCollection.FindOne(c, bson.M{"email": user.Email}).Decode(&userFromDb)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -140,8 +140,20 @@ func Login(ctx *gin.Context) {
 		return
 	}
 
-	token, refreshToken, _ := helpers.GenerateTokens(userFromDb.Email, userFromDb.UserName, userFromDb.FirstName)
-	helpers.RefreshTokens(token, refreshToken, userFromDb.UserName)
+	token, refreshToken, err := helpers.GenerateTokens(userFromDb.Email, userFromDb.UserName, userFromDb.FirstName)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	err = helpers.RefreshTokens(token, refreshToken, userFromDb.UserName)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	userFromDb.Token = token
+	userFromDb.RefreshToken = refreshToken
 
 	ctx.JSON(http.StatusOK, userFromDb)
 }

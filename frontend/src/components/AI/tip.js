@@ -3,7 +3,7 @@ import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 import './tip.css';
 
-const TipDisplay = () => {
+const TipDisplay = ({ isAuthenticated }) => {
   const [tip, setTip] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -12,7 +12,12 @@ const TipDisplay = () => {
     try {
       setLoading(true);
       setError('');
-      const response = await axios.get('http://localhost:8000/tip');
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:8000/tip', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setTip(response.data.aitip.Candidates[0].Content.Parts[0]);
       console.log(response.data.aitip.Candidates[0].Content.Parts[0]);
     } catch (error) {
@@ -44,6 +49,28 @@ const TipDisplay = () => {
       </div>
     );
   };
+
+  if (!isAuthenticated) {
+    return (
+      <section className="tip-section" id="coach">
+        <div className="tip-container">
+          <div className="tip-header">
+            <div>
+              <p className="tip-eyebrow">AI coach</p>
+              <h2 className="tip-heading">Log in to unlock AI nutrition guidance.</h2>
+              <p className="tip-subtext">
+                The AI coach uses your tracked meals to generate advice, so this
+                section becomes available after login.
+              </p>
+            </div>
+            <a className="tip-login-link" href="/login">
+              Log in first
+            </a>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="tip-section" id="coach">

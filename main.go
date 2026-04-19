@@ -22,8 +22,8 @@ func main() {
 	router.Use(gin.Logger())
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000"},
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
-		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization", "token"},
 		AllowCredentials: true,
 	}))
 	router.Use(middleware.PerClientTokenBucket())

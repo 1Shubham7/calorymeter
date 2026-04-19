@@ -1,0 +1,6 @@
+foods.csv
+food_embeddings.npy
+__pycache__/
+*.pyc
+.venv/
+venv/

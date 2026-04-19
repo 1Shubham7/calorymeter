@@ -14,4 +14,5 @@ func FoodRoutes(incomingRoutes *gin.Engine) {
 	incomingRoutes.PUT("/food/ingredient/update/:id", api.UpdateFoodIngredient)
 	incomingRoutes.DELETE("/food/entry/delete/:id", api.DeleteFoodEntry)
 	incomingRoutes.POST("/food/create", api.AddFoodEntry)
+	incomingRoutes.POST("/food/calculate-calories", api.CalculateCalories)
 }

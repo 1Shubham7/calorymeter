@@ -68,6 +68,12 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
+.navbar-button-reset {
+  border: none;
+  font: inherit;
+  cursor: pointer;
+}
+
 .navbar-ghost-link {
   padding: 0.8rem 1.1rem;
   border: 1px solid var(--line);
