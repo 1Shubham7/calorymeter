@@ -1,44 +1,177 @@
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap');
-
 .hero-section {
-  background-image: url('bgbg.png');
-  background-size: 100% auto;
-  background-position: center top;
-  background-repeat: no-repeat;
-  height: 86vh;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 0 2rem;
+  padding: 5rem 3rem 3rem;
 }
 
-.hero-content {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 0.85fr);
+  gap: 2rem;
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 3.4rem 3.2rem;
+  border-radius: 32px;
+  background:
+    linear-gradient(120deg, rgba(23, 32, 51, 0.92), rgba(23, 32, 51, 0.8)),
+    url('bgbg.png') center/cover no-repeat;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.hero-copy h1 {
+  margin: 0;
+  max-width: 12ch;
+  color: #fff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2.8rem, 5vw, 5rem);
+  line-height: 0.98;
+  letter-spacing: -0.05em;
+}
+
+.hero-eyebrow {
+  margin: 0 0 1rem;
+  color: rgba(255, 255, 255, 0.72);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.78rem;
+  font-weight: 800;
 }
 
 .hero-text {
-  color: #fff;
-  font-size: clamp(1.5rem, 4vw, 3rem);
-  font-weight: 400;
-  line-height: 1.5;
-  max-width: 700px;
-  margin-left: 2rem;
+  margin: 1.25rem 0 0;
+  max-width: 42rem;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 1.08rem;
+  line-height: 1.8;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.hero-primary,
+.hero-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.95rem 1.35rem;
+  border-radius: 999px;
   text-align: left;
-  font-family: 'Ubuntu', sans-serif;
+  text-decoration: none;
+  font-weight: 700;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hero-primary {
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent), #f97316);
+  box-shadow: 0 18px 35px rgba(234, 88, 12, 0.3);
+}
+
+.hero-secondary {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.hero-primary:hover,
+.hero-secondary:hover {
+  transform: translateY(-2px);
+}
+
+.hero-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 2.1rem;
+  max-width: 50rem;
+}
+
+.hero-metric-card {
+  padding: 1rem 1rem 1.15rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.hero-metric-number {
+  display: block;
+  color: #fff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.hero-metric-label {
+  display: block;
+  margin-top: 0.35rem;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.hero-panel {
+  align-self: end;
+  padding: 1.5rem;
+  border-radius: 24px;
+  background: rgba(255, 250, 245, 0.94);
+  box-shadow: var(--shadow-md);
+}
+
+.hero-panel-badge {
+  display: inline-flex;
+  margin-bottom: 0.9rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero-panel h2 {
+  margin: 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.7rem;
+  line-height: 1.15;
+}
+
+.hero-panel-list {
+  margin: 1rem 0 0;
+  padding-left: 1.1rem;
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.hero-panel-note {
+  margin-top: 1rem;
+  padding: 1rem 1.1rem;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid rgba(23, 32, 51, 0.08);
+  color: var(--ink);
+  line-height: 1.7;
 }
 
 @media (max-width: 768px) {
   .hero-section {
-    height: auto;
-    min-height: 86vh;
-    padding: 3rem 1rem;
-    background-size: cover;
+    padding: 3rem 1rem 2rem;
   }
 
-  .hero-text {
-    margin-left: 1rem;
-    max-width: 100%;
+  .hero-grid {
+    grid-template-columns: 1fr;
+    padding: 2.2rem 1.3rem;
+  }
+
+  .hero-copy h1 {
+    max-width: none;
+  }
+
+  .hero-metrics {
+    grid-template-columns: 1fr;
   }
 }

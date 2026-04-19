@@ -9,14 +9,17 @@ export default function Navbar() {
     <div className="navbar">
       <div className="navbar-links">
         <div className="navbar-links_container">
-          <div className="coding-buddy">
-            <a href="/">Calorymeter</a>
+          <div className="brand-mark">
+            <a href="/">CaloriTrack</a>
           </div>
           <p>
-            <a href="#track">Track your calories</a>
+            <a href="#why">Why it matters</a>
           </p>
           <p>
-            <a href="#about">About</a>
+            <a href="#track">Track calories</a>
+          </p>
+          <p>
+            <a href="#coach">AI coach</a>
           </p>
           <p>
             <a href="#community">Community</a>
@@ -27,18 +30,23 @@ export default function Navbar() {
         </div>
       </div>
       <div className="navbar-sign">
-        <button type="button">Log In</button>
+        <a className="navbar-ghost-link" href="http://localhost:8080/" target="_blank" rel="noopener noreferrer">
+          Image recognition
+        </a>
+        <a className="navbar-primary-link" href="/signup">
+          Create account
+        </a>
       </div>
       <div className="navbar-menu">
         {toggleMenu ? (
           <RiCloseLine
-            color="#fff"
+            color="#172033"
             size={27}
             onClick={() => setToggleMenu(false)}
           />
         ) : (
           <RiMenu3Line
-            color="#fff"
+            color="#172033"
             size={27}
             onClick={() => setToggleMenu(true)}
           />
@@ -47,13 +55,16 @@ export default function Navbar() {
           <div className="navbar-menu_container scale-up-center">
             <div className="navbar-menu_container-links">
               <p>
-                <a href="/">Calorymeter</a>
+                <a href="/">CaloriTrack</a>
               </p>
               <p>
-                <a href="#track">Track your calories</a>
+                <a href="#why">Why it matters</a>
               </p>
               <p>
-                <a href="#about">About</a>
+                <a href="#track">Track calories</a>
+              </p>
+              <p>
+                <a href="#coach">AI coach</a>
               </p>
               <p>
                 <a href="#community">Community</a>
@@ -63,7 +74,12 @@ export default function Navbar() {
               </p>
             </div>
             <div className="navbar-menu_container-links-sign">
-              <button type="button">Log In</button>
+              <a className="navbar-menu_link" href="http://localhost:8080/" target="_blank" rel="noopener noreferrer">
+                Image recognition
+              </a>
+              <a className="navbar-menu_button" href="/signup">
+                Create account
+              </a>
             </div>
           </div>
         )}

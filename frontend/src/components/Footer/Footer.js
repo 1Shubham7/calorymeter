@@ -4,9 +4,15 @@ import { SocialIcon } from 'react-social-icons';
 
 export default function Footer() {
   return (
-    <>
-      <div className="footer">
-        <div className="row-one">
+    <footer className="footer" id="community">
+      <div className="footer-shell">
+        <div className="footer-brand">
+          <p className="footer-eyebrow">CaloriTrack</p>
+          <h2>Build a nutrition routine you can actually maintain.</h2>
+          <p className="footer-copy">
+            CaloriTrack combines meal logging, AI guidance, and image
+            recognition so nutrition tracking feels practical instead of heavy.
+          </p>
           <div className="socials">
             <div className="social-logo">
               <SocialIcon url="https://twitter.com/1shubham7" />
@@ -23,41 +29,32 @@ export default function Footer() {
                 bgColor="#ffffff"
               />
             </div>
-            <div className="social-logo">
-              <SocialIcon url="https://chat.whatsapp.com/K0K0ktvmtJDC6E1t20klDp" />
-            </div>
-          </div>
-          <div className="text-part">
-            <div className="text-links">
-              <a href="#licenses" className="my-text-link-1 news">
-                Licenses
-              </a>
-              <a href="#about" className="my-text-link-2 news">
-                About
-              </a>
-              <a href="#privacy" className="my-text-link news">
-                Privacy Policy
-              </a>
-              <a href="#blogs" className="my-text-link news">
-                Blogs
-              </a>
-              <a href="#contribute" className="my-text-link news">
-                Contribute
-              </a>
-            </div>
-            <div className="text-para">
-              Coding Buddy helps you find your coding partner. This project is
-              created with React and Golang. The code has been open-sourced on
-              GitHub. The project is licensed under MIT License. Using this
-              website means the user agrees to all the terms and contidions and
-              well as the Privacy Policy of the project.
-            </div>
           </div>
         </div>
-        <div className="row-two">
-          <h1 className="copyright">© 2023 All Rights Reserved</h1>
+        <div className="footer-links-grid">
+          <div className="footer-column">
+            <h3>Product</h3>
+            <a href="#track">Calorie tracking</a>
+            <a href="#coach">AI coach</a>
+            <a href="http://localhost:8080/" target="_blank" rel="noopener noreferrer">Image recognition</a>
+          </div>
+          <div className="footer-column">
+            <h3>Project</h3>
+            <a href="https://github.com/1Shubham7/calorymeter" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a href="/signup">Create account</a>
+            <a href="/ws">Community chat</a>
+          </div>
+          <div className="footer-column">
+            <h3>Why use it</h3>
+            <p>Track meals before guesswork stacks up.</p>
+            <p>See daily intake in one place.</p>
+            <p>Use AI feedback to adjust earlier.</p>
+          </div>
         </div>
       </div>
-    </>
+      <div className="footer-bottom">
+        <p>© 2026 CaloriTrack. Built with React, Go, MongoDB, WebSockets, and Gemini-powered tips.</p>
+      </div>
+    </footer>
   );
 }

@@ -1,16 +1,82 @@
-@import url('https://fonts.googleapis.com/css2?family=Jolly+Lodger&display=swap');
-
-.quote-text {
-  color: #a31010;
-  font-size: 4.0625rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  margin-left: 6.69rem;
-  margin-right: 20rem;
+.quote-box {
+  padding: 2rem 3rem 0;
 }
 
-.quote-box {
-  padding-top: 10rem;
-  padding-bottom: 10rem;
+.quote-shell {
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 2.4rem 2.5rem;
+  border-radius: var(--radius-xl);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-md);
+}
+
+.quote-intro {
+  max-width: 48rem;
+}
+
+.quote-eyebrow {
+  margin: 0 0 0.75rem;
+  color: var(--accent-deep);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.quote-title {
+  margin: 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+}
+
+.quote-description {
+  margin: 1rem 0 0;
+  color: var(--muted);
+  font-size: 1.03rem;
+  line-height: 1.8;
+}
+
+.quote-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.quote-card {
+  padding: 1.35rem;
+  border-radius: var(--radius-lg);
+  background: var(--surface-strong);
+  border: 1px solid rgba(23, 32, 51, 0.08);
+}
+
+.quote-card h3 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.quote-card p {
+  margin: 0.7rem 0 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+@media (max-width: 900px) {
+  .quote-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .quote-box {
+    padding: 1rem 1rem 0;
+  }
+
+  .quote-shell {
+    padding: 1.6rem 1.2rem;
+  }
 }

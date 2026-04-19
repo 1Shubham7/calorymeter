@@ -11,7 +11,7 @@ class ChatHistory extends Component {
 
     return (
       <div className="ChatHistory">
-        <h2>Calorymeter Chat</h2>
+        <h2>CaloriTrack Chat</h2>
         <p align="center">
           {' '}
           Please be respectful to others in the chat.

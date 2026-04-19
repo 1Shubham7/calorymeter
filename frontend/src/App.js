@@ -19,13 +19,12 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={
+          element={
               <>
                 <Hero />
+                <QuoteOne />
                 <Entries />
                 <TipDisplay />
-                <QuoteOne />
-                {/* <Me /> */}
                 <Footer />
               </>
             }

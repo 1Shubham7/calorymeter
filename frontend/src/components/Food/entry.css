@@ -1,98 +1,95 @@
-/* entry.css */
 .entry-card {
-    background-color: var(--card-background);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-    transition: transform 0.2s, box-shadow 0.2s;
-    overflow: hidden;
-  }
-  
-  .entry-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-  
+  overflow: hidden;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-md);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.entry-card:hover {
+  transform: translateY(-2px);
+}
+
+.entry-content {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.3rem 1.4rem;
+}
+
+.entry-info {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem 1.2rem;
+  flex: 1;
+}
+
+.entry-field {
+  padding: 0.9rem 1rem;
+  border-radius: 16px;
+  background: #fffaf5;
+  border: 1px solid rgba(23, 32, 51, 0.06);
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.field-value {
+  color: var(--ink);
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.entry-actions {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.edit-button,
+.update-button,
+.delete-button {
+  padding: 0.78rem 1rem;
+  border-radius: 999px;
+  border: none;
+  color: #fff;
+  font-weight: 700;
+}
+
+.edit-button,
+.update-button {
+  background: linear-gradient(135deg, #1d4ed8, #2563eb);
+}
+
+.delete-button {
+  background: linear-gradient(135deg, #dc2626, #ef4444);
+}
+
+@media (max-width: 900px) {
   .entry-content {
-    padding: 16px;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 16px;
+    flex-direction: column;
   }
-  
+}
+
+@media (max-width: 768px) {
   .entry-info {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    flex: 1;
+    grid-template-columns: 1fr;
   }
-  
-  .entry-field {
-    min-width: 160px;
-  }
-  
-  .field-label {
-    font-weight: 600;
-    color: #666;
-    margin-right: 6px;
-  }
-  
-  .field-value {
-    color: #333;
-  }
-  
+
   .entry-actions {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+    flex-direction: column;
   }
-  
-  .edit-button {
-    background-color: #226edf;
-    color: white;
+
+  .entry-actions button {
+    width: 100%;
   }
-  
-  .edit-button:hover {
-    background-color: #8cbaff;
-  }
-  
-  .update-button {
-    background-color: #226edf;
-    color: white;
-  }
-  
-  .update-button:hover {
-    background-color: #8cbaff;
-  }
-  
-  .delete-button {
-    background-color: #d71e1e;
-    color: white;
-  }
-  
-  .delete-button:hover {
-    background-color: #d65c5c;
-  }
-  
-  @media (max-width: 768px) {
-    .entry-content {
-      flex-direction: column;
-    }
-    
-    .entry-info {
-      flex-direction: column;
-      gap: 10px;
-    }
-    
-    .entry-field {
-      min-width: unset;
-    }
-    
-    .entry-actions {
-      justify-content: space-between;
-    }
-    
-    .entry-actions button {
-      flex: 1;
-    }
-  }
+}
