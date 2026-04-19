@@ -1,0 +1,60 @@
+.image-recognition-card {
+  margin-top: 2rem;
+  max-width: 30rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 1rem;
+  background: rgba(11, 15, 25, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(8px);
+}
+
+.image-recognition-eyebrow {
+  margin: 0 0 0.6rem;
+  color: #8ce99a;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.image-recognition-card h2 {
+  margin: 0 0 0.75rem;
+  color: #fff;
+  font-size: clamp(1.2rem, 2vw, 1.75rem);
+  line-height: 1.25;
+}
+
+.image-recognition-card p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1.6;
+}
+
+.image-recognition-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+  padding: 0.8rem 1.25rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #8ce99a, #51cf66);
+  color: #102a15;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 10px 25px rgba(81, 207, 102, 0.35);
+}
+
+.image-recognition-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(81, 207, 102, 0.45);
+}
+
+@media (max-width: 768px) {
+  .image-recognition-card {
+    max-width: 100%;
+    margin-left: 2rem;
+    margin-right: 1rem;
+  }
+}
